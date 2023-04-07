@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'app/utils/stylePages/app_colors.dart';
 import 'flavors.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatefulWidget {
   final MaterialColor color;
@@ -22,8 +23,8 @@ class _AppState extends State<App> {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: AppColors.defaultColor,
-      systemNavigationBarColor: AppColors.defaultColor,
+      statusBarColor: AppColors.blackColor,
+      systemNavigationBarColor: AppColors.blackColor,
       statusBarIconBrightness: Brightness.light,
       systemNavigationBarIconBrightness: Brightness.light,
     ));
@@ -32,6 +33,11 @@ class _AppState extends State<App> {
       return GetMaterialApp(
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
         supportedLocales: const [
           Locale('pt', 'BR'),
         ],

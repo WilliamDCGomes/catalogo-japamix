@@ -41,10 +41,10 @@ class ButtonWidget extends StatelessWidget {
         focusNode: focusNode,
         style: ElevatedButton.styleFrom(
           elevation: 2,
-          backgroundColor: backgroundColor ?? AppColors.defaultColor,
+          backgroundColor: backgroundColor ?? AppColors.redColor,
           side: BorderSide(
             width: .25.h,
-            color: borderColor ?? AppColors.defaultColor,
+            color: borderColor ?? AppColors.redColor,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radioButton ?? 1.h),

@@ -11,6 +11,7 @@ class InformationPopup extends StatefulWidget {
   final Widget? title;
   final double? fontSize;
   final Color? popupColor;
+  final bool success;
 
   const InformationPopup({
     Key? key,
@@ -18,6 +19,7 @@ class InformationPopup extends StatefulWidget {
     this.title,
     this.fontSize,
     this.popupColor,
+    this.success = false,
   }) : super(key: key);
 
   @override
@@ -62,7 +64,7 @@ class _InformationPopupState extends State<InformationPopup> {
                   width: 90.w,
                   padding: EdgeInsets.all(1.h),
                   decoration: BoxDecoration(
-                    color: widget.popupColor ?? AppColors.defaultColor,
+                    color: widget.popupColor ?? (widget.success ? AppColors.greenColor : AppColors.redColor),
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(1.h),
                       topLeft: Radius.circular(1.h),
@@ -97,8 +99,8 @@ class _InformationPopupState extends State<InformationPopup> {
                             heightButton: 5.h,
                             widthButton: 32.w,
                             fontWeight: FontWeight.bold,
-                            backgroundColor: widget.popupColor,
-                            borderColor:  widget.popupColor,
+                            backgroundColor: widget.popupColor ?? (widget.success ? AppColors.greenColor : AppColors.redColor),
+                            borderColor: widget.popupColor ?? (widget.success ? AppColors.greenColor : AppColors.redColor),
                             onPressed: () => Get.back(),
                           ),
                         ),

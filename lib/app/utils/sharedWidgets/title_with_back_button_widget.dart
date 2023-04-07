@@ -35,25 +35,22 @@ class TitleWithBackButtonWidget extends StatelessWidget {
                 padding: EdgeInsets.only(right: 2.w),
                 child: Icon(
                   Icons.arrow_back_ios,
-                  color: titleColor ?? AppColors.backgroundColor,
+                  color: titleColor ?? AppColors.blackColor,
                   size: 3.h,
                 ),
               ),
             ),
             Expanded(
-              child: Row(children: [
-                InkWell(
-                  onTap: backButtonPressedFuctionOverride ?? () => Get.back(),
-                  child: TextWidget(
-                    title,
-                    textColor: titleColor ?? AppColors.backgroundColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.sp,
-                    textAlign: TextAlign.start,
-                  ),
+              child: InkWell(
+                onTap: backButtonPressedFuctionOverride ?? () => Get.back(),
+                child: TextWidget(
+                  title,
+                  textColor: titleColor ?? AppColors.blackColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.sp,
+                  textAlign: TextAlign.start,
                 ),
-                Expanded(child: Container()),
-              ]),
+              ),
             ),
             if (rightIcon != null)
               InkWell(

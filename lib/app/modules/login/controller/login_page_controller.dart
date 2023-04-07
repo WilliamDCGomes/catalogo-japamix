@@ -44,7 +44,7 @@ class LoginPageController extends GetxController {
     appVersion.value = (await PackageInfo.fromPlatform()).version;
     userInputController.text = FormatNumbers.stringToCpf(sharedPreferences.getString("user_logged") ?? "");
     if (kDebugMode) {
-      passwordInputController.text = "ZiPartner@2023";
+      passwordInputController.text = "Japamix@2023";
     }
     await _getKeepConnected();
     if (!cancelFingerPrint) {
