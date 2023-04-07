@@ -11,6 +11,8 @@ class InformationContainerWidget extends StatelessWidget {
   final EdgeInsets? padding;
   final String iconPath;
   final String informationText;
+  final bool disableWhiteIconColor;
+  final bool showBorder;
   final Color textColor;
   final Color backgroundColor;
 
@@ -20,6 +22,8 @@ class InformationContainerWidget extends StatelessWidget {
         this.marginContainer,
         this.marginIcon,
         this.padding,
+        this.disableWhiteIconColor = false,
+        this.showBorder = false,
         required this.iconPath,
         required this.informationText,
         required this.textColor,
@@ -42,6 +46,10 @@ class InformationContainerWidget extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(1.h),
             color: backgroundColor,
+            border: showBorder ? Border.all(
+              width: .25.h,
+              color: AppColors.redColor,
+            ) : null,
           ),
           child: customContainer ?? TextWidget(
             informationText,
@@ -55,7 +63,7 @@ class InformationContainerWidget extends StatelessWidget {
         Align(
           alignment: Alignment.topRight,
           child: Container(
-            padding: EdgeInsets.all(2.h),
+            padding: EdgeInsets.all(1.5.h),
             margin: marginIcon ?? EdgeInsets.only(
               top: PlatformType.isTablet(context) ? 4.h : 2.h,
               right: 1.w,
@@ -63,12 +71,16 @@ class InformationContainerWidget extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4.5.h),
               color: backgroundColor,
+              border: showBorder ? Border.all(
+                width: .25.h,
+                color: AppColors.redColor,
+              ) : null,
             ),
             child: Image.asset(
               iconPath,
               height: 5.h,
               width: 5.h,
-              color: AppColors.blackColor,
+              color: disableWhiteIconColor ? null : AppColors.blackColor,
             ),
           ),
         ),

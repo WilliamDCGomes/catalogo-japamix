@@ -14,6 +14,7 @@ import '../../../utils/helpers/format_numbers.dart';
 import '../../../utils/helpers/internet_connection.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 import '../../../utils/sharedWidgets/popups/information_popup.dart';
+import '../../mainMenu/page/main_menu_page.dart';
 
 class LoginPageController extends GetxController {
   late bool cancelFingerPrint;
@@ -116,16 +117,16 @@ class LoginPageController extends GetxController {
       if (formKey.currentState!.validate()) {
         await loadingWithSuccessOrErrorWidget.startAnimation();
 
-        if (!await _doLoginServer(false)) {
+        /*if (!await _doLoginServer(false)) {
           return;
         }
         if (!await _getUserInformations()) {
           throw Exception();
-        }
+        }*/
 
         loginButtonFocusNode.requestFocus();
 
-        if (userLogged != null) {
+        //if (userLogged != null) {
           await _saveOptions();
           await sharedPreferences.setString("password", passwordInputController.text);
 
@@ -133,7 +134,7 @@ class LoginPageController extends GetxController {
 
           await loadingWithSuccessOrErrorWidget.stopAnimation();
           _goToNextPage();
-        } else {
+        /*} else {
           await loadingWithSuccessOrErrorWidget.stopAnimation(fail: true);
           await showDialog(
             context: Get.context!,
@@ -144,7 +145,7 @@ class LoginPageController extends GetxController {
               );
             },
           );
-        }
+        }*/
       }
     } catch (_) {
       await loadingWithSuccessOrErrorWidget.stopAnimation(fail: true);
@@ -286,7 +287,7 @@ class LoginPageController extends GetxController {
   }
 
   _goToNextPage() async {
-
+    Get.offAll(() => const MainMenuPage());
   }
 
   _resetLogin(String message) async {

@@ -52,16 +52,16 @@ dev_dependencies:
 # flutter pub get
 # flutter pub run flutter_native_splash:create
 flutter_native_splash:
-  background_image: assets/images/Background_Azul.png
-  background_image_dark: assets/images/Background_Azul.png
-  image: assets/images/Icon_App.png
-  image_dark: assets/images/Icon_App.png
+  background_image: assets/images/background.png
+  background_image_dark: assets/images/background.png
+  image: assets/images/app_icon.png
+  image_dark: assets/images/app_icon.png
 
   android_12:
-    background_image: assets/images/Background_Azul.png
-    background_image_dark: assets/images/Background_Azul.png
-    image: assets/images/Icon_App.png
-    image_dark: assets/images/Icon_App.png
+    background_image: assets/images/background.png
+    background_image_dark: assets/images/background.png
+    image: assets/images/app_icon.png
+    image_dark: assets/images/app_icon.png
 
   web: false
 
@@ -72,9 +72,9 @@ flutter_native_splash:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/Icon_App.png"
-  adaptive_icon_background: "assets/images/background_icon.png"
-  adaptive_icon_foreground: "assets/images/Icon_App.png"
+  image_path: "assets/images/app_icon.png"
+  adaptive_icon_background: "assets/images/background.png"
+  adaptive_icon_foreground: "assets/images/app_icon.png"
 
 # Rodar sempre que quiser adicionar o flavor
 # flutter clean
@@ -88,21 +88,21 @@ flavorizr:
   flavors:
     dev:
       app:
-        name: "Catálogo Japamix DEV"
+        name: "Guia Japamix DEV"
       android:
         applicationId: "com.catalago_japamix.catalago_dev"
       ios:
         bundleId: "com.catalago_japamix.catalago_dev"
     hmlg:
       app:
-        name: "Catálogo Japamix HMLG"
+        name: "Guia Japamix HMLG"
       android:
         applicationId: "com.catalago_japamix.catalago_hmlg"
       ios:
         bundleId: "com.catalago_japamix.catalago_hmlg"
     prod:
       app:
-        name: "Catálogo Japamix"
+        name: "Guia Japamix"
       android:
         applicationId: "com.catalago_japamix.catalago"
       ios:

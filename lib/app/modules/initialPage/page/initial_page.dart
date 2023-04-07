@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../utils/helpers/app_close_controller.dart';
-import '../../../utils/sharedWidgets/text_widget.dart';
+import '../../../utils/helpers/paths.dart';
+import '../../../utils/helpers/platform_type.dart';
 import '../../../utils/stylePages/app_colors.dart';
 import '../controller/initial_page_controller.dart';
 
@@ -40,23 +41,16 @@ class _InitialPageState extends State<InitialPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.only(bottom: 7.h),
-                        child: TextWidget(
-                          "LOGO",
-                          textColor: AppColors.defaultColor,
-                          fontSize: 26.sp,
-                          textAlign: TextAlign.center,
-                          fontWeight: FontWeight.bold,
-                          maxLines: 4,
-                        ),/*Image.asset(
-                          Paths.Logo_Branca,
-                          height: PlatformType.isPhone(context) ? 18.h : 12.h,
-                        ),*/
+                        child: Image.asset(
+                          Paths.logoApp,
+                          height: PlatformType.isPhone(context) ? 20.h : 18.h,
+                        ),
                       ),
                       SizedBox(
                         height: 6.h,
                         width: 6.h,
                         child: const CircularProgressIndicator(
-                          color: AppColors.whiteColor,
+                          color: AppColors.redColor,
                         ),
                       ),
                     ],

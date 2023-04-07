@@ -8,6 +8,7 @@ class AppColors {
   static final Color blackWithOpacity = Colors.black.withOpacity(.6);
   static const Color transparentColor = Colors.transparent;
   static const Color defaultColor = Color(0XFFFDED01);
+  static final Color defaultColorWithOpacity = const Color(0XFFFDED01).withOpacity(.6);
   static const Color orangeColor = Color(0XFFEA6F55);
   static const Color redColor = Color(0XFFE6313A);
   static const Color greenColor = Color(0XFF008001);

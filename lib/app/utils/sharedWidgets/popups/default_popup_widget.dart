@@ -73,7 +73,7 @@ class _DefaultPopupWidgetState extends State<DefaultPopupWidget> {
                     ),
                     child: TextWidget(
                       widget.title ?? "AVISO",
-                      textColor: AppColors.whiteColor,
+                      textColor: AppColors.blackColor,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       maxLines: 2,

@@ -2,5 +2,5 @@
 
 FLUTTER_TARGET=lib/main_dev.dart
 ASSET_PREFIX=dev
-BUNDLE_NAME=Catálogo Japamix DEV
-BUNDLE_DISPLAY_NAME=Catálogo Japamix DEV
+BUNDLE_NAME=Guia Japamix DEV
+BUNDLE_DISPLAY_NAME=Guia Japamix DEV

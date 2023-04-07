@@ -290,7 +290,7 @@ class RegisterUserController extends GetxController {
 
     await Future.delayed(const Duration(seconds: 1));
 
-    try{
+    try {
       await loadingWithSuccessOrErrorWidget.stopAnimation();
       await showDialog(
         context: Get.context!,
