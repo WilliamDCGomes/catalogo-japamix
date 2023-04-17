@@ -11,6 +11,7 @@ class Places extends CatalogoJapamixCore {
   String phone1;
   String? phone2;
   String? phone3;
+  List<String>? imagesPlace;
 
   Places({
     required this.name,
@@ -19,6 +20,7 @@ class Places extends CatalogoJapamixCore {
     this.phone2,
     this.phone3,
     this.place,
+    this.imagesPlace,
   });
 
   factory Places.fromJson(Map<String, dynamic> json) => _$PlacesFromJson(json);

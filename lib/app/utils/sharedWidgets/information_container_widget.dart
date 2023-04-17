@@ -37,9 +37,7 @@ class InformationContainerWidget extends StatelessWidget {
         Container(
           width: double.infinity,
           margin: marginContainer ?? EdgeInsets.only(
-            left: 2.h,
             top: PlatformType.isTablet(context) ? 9.h : 7.h,
-            right: 2.h,
             bottom: 2.h,
           ),
           padding: padding ?? EdgeInsets.fromLTRB(5.w, 4.h, 5.w, 3.h),

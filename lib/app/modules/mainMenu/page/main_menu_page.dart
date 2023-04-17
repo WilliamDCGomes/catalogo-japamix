@@ -92,7 +92,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                   ),
                   backgroundColor: AppColors.transparentColor,
                   body: Padding(
-                    padding: EdgeInsets.only(top: 15.h),
+                    padding: EdgeInsets.only(left: 4.w, top: 15.h, right: 4.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -125,7 +125,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
                               child: ListView.builder(
                                 itemCount: controller.visitPlaces.length,
                                 shrinkWrap: true,
-                                padding: EdgeInsets.symmetric(horizontal: 2.h),
                                 itemBuilder: (context, index) {
                                   return PlaceCardWidget(
                                     place: controller.visitPlaces[index],

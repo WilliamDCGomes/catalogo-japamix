@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/models/places/places.dart';
+import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
@@ -65,6 +66,21 @@ class MainMenuController extends GetxController {
       ),
     ];
     visitPlaces = <Places>[
+      Places(
+        name: "Área de lazer JF eventos Completo",
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris velit ligula, auctor vitae congue a, semper efficitur arcu. Donec vulputate aliquam augue, a imperdiet lacus volutpat ac. Nulla at augue quis diam viverra luctus nec eu massa. Vestibulum elementum arcu nulla, fermentum luctus diam malesuada vel. Aenean vel purus laoreet, aliquet urna at, pulvinar ligula. Etiam auctor odio mattis ipsum sagittis imperdiet. Suspendisse potenti. Duis quis tempus diam. In felis orci, vehicula eu dignissim ut, condimentum non tellus.",
+        phone1: "(17) 99158-6377",
+        phone2: "(17) 99234-9875",
+        phone3: "(17) 98234-2835",
+        place: "Jd. das Oliveiras",
+        imagesPlace: [
+          Paths.backgroundImage,
+          Paths.backgroundImage,
+          Paths.backgroundImage,
+          Paths.backgroundImage,
+          Paths.backgroundImage,
+        ],
+      ),
       Places(
         name: "Área de lazer JF eventos",
         phone1: "(17) 99158-6377",
