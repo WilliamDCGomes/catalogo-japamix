@@ -95,7 +95,7 @@ class MainMenuController extends GetxController {
         name: "Villa’s Eventos",
         phone1: "(17) 99635-0484",
         phone2: "(17) 3543-1248",
-        place: "(17) 3542-1830",
+        phone3: "(17) 3542-1830",
       ),
       Places(
         name: "Falcão - JD. Falcão",

@@ -5,6 +5,7 @@ import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
+import '../../createEditAd/controller/create_edit_ad_controller.dart';
 import '../controller/main_menu_controller.dart';
 import '../widget/place_card_widget.dart';
 
@@ -135,6 +136,16 @@ class _MainMenuPageState extends State<MainMenuPage> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () => Get.to(() => CreateEditAdController(null)),
+                    backgroundColor: AppColors.redColor,
+                    elevation: 3,
+                    child: Icon(
+                      Icons.add,
+                      color: AppColors.whiteColor,
+                      size: 4.h,
                     ),
                   ),
                 ),
