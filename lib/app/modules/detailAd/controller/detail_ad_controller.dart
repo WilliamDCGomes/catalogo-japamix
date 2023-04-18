@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import '../../../../base/models/places/places.dart';
+import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 
 class DetailAdController extends GetxController {
-  late Places visitPlace;
+  late Establishment visitPlace;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
 
   DetailAdController(this.visitPlace) {

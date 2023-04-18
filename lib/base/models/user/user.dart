@@ -1,10 +1,11 @@
-import 'package:catalago_japamix/base/models/base/catalogo_japamix_core.dart';
+import 'package:catalago_japamix/base/models/base/japamix_base.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'user.g.dart';
 
 @JsonSerializable()
-class User extends CatalogoJapamixCore {
+class User extends JapaMixBase {
   late String name;
   String? tellphone;
   DateTime? birthdayDate;
@@ -40,11 +41,12 @@ class User extends CatalogoJapamixCore {
     required this.stuffedAnimalsLastUpdate,
     required this.userName,
     required this.password,
-  }) {
+  }) : super(id: const Uuid().v4(), inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false) {
     selected = false;
   }
 
-  User.emptyConstructor() {
+  User.emptyConstructor()
+      : super(id: const Uuid().v4(), inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false) {
     name = "";
     tellphone = "";
     document = "";

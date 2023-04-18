@@ -1,8 +1,9 @@
+import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../base/models/category/category.dart';
-import '../../../../base/models/places/places.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
@@ -14,7 +15,7 @@ import '../../../utils/stylePages/app_colors.dart';
 class MainMenuController extends GetxController {
   late TextEditingController searchByName;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
-  late RxList<Places> visitPlaces;
+  late RxList<Establishment> visitPlaces;
   late List<Category> _categories;
 
   MainMenuController() {
@@ -26,89 +27,59 @@ class MainMenuController extends GetxController {
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     _categories = <Category>[
       Category(
-        name: "Áreas de lazer para eventos e diversão em geral",
+        id: const Uuid().v4(),
+        description: "Áreas de lazer para eventos e diversão em geral",
       ),
       Category(
-        name: "Cabeleireiros e barbearias",
+        id: const Uuid().v4(),
+        description: "Cabeleireiros e barbearias",
       ),
       Category(
-        name: "Lista de delivery com a maior opção para sua fome",
+        id: const Uuid().v4(),
+        description: "Lista de delivery com a maior opção para sua fome",
       ),
       Category(
-        name: "Açai, Assados, Food Truck, Sucos e Pizzarias",
+        id: const Uuid().v4(),
+        description: "Açai, Assados, Food Truck, Sucos e Pizzarias",
       ),
       Category(
-        name: "Café da Manhã",
+        id: const Uuid().v4(),
+        description: "Café da Manhã",
       ),
       Category(
-        name: "Salgados para festa, bolos e doces em geral",
+        id: const Uuid().v4(),
+        description: "Salgados para festa, bolos e doces em geral",
       ),
       Category(
-        name: "Restaurantes e marmitarias",
+        id: const Uuid().v4(),
+        description: "Restaurantes e marmitarias",
       ),
       Category(
-        name: "Farmácias e Drogarias",
+        id: const Uuid().v4(),
+        description: "Farmácias e Drogarias",
       ),
       Category(
-        name: "Motorista de Aplicativo",
+        id: const Uuid().v4(),
+        description: "Motorista de Aplicativo",
       ),
       Category(
-        name: "Mototáxi, táxi e motorista de app",
+        id: const Uuid().v4(),
+        description: "Mototáxi, táxi e motorista de app",
       ),
       Category(
-        name: "Fretes em Geral",
+        id: const Uuid().v4(),
+        description: "Fretes em Geral",
       ),
       Category(
-        name: "Profissionais da Construção Civil",
+        id: const Uuid().v4(),
+        description: "Profissionais da Construção Civil",
       ),
       Category(
-        name: "Manicures, pedicures e podólogas",
+        id: const Uuid().v4(),
+        description: "Manicures, pedicures e podólogas",
       ),
     ];
-    visitPlaces = <Places>[
-      Places(
-        name: "Área de lazer JF eventos Completo",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris velit ligula, auctor vitae congue a, semper efficitur arcu. Donec vulputate aliquam augue, a imperdiet lacus volutpat ac. Nulla at augue quis diam viverra luctus nec eu massa. Vestibulum elementum arcu nulla, fermentum luctus diam malesuada vel. Aenean vel purus laoreet, aliquet urna at, pulvinar ligula. Etiam auctor odio mattis ipsum sagittis imperdiet. Suspendisse potenti. Duis quis tempus diam. In felis orci, vehicula eu dignissim ut, condimentum non tellus.",
-        phone1: "(17) 99158-6377",
-        phone2: "(17) 99234-9875",
-        phone3: "(17) 98234-2835",
-        place: "Jd. das Oliveiras",
-        imagesPlace: [
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-        ],
-      ),
-      Places(
-        name: "Área de lazer JF eventos",
-        phone1: "(17) 99158-6377",
-        place: "Jd. das Oliveiras",
-      ),
-      Places(
-        name: "Jd. das Oliveiras",
-        phone1: "(17) 3542-4434",
-        phone2: "(17) 99157-0369",
-      ),
-      Places(
-        name: "Villa’s Eventos",
-        phone1: "(17) 99635-0484",
-        phone2: "(17) 3543-1248",
-        phone3: "(17) 3542-1830",
-      ),
-      Places(
-        name: "Falcão - JD. Falcão",
-        phone1: "(17) 99200-2103",
-        phone2: "(17) 98150-2199",
-      ),
-      Places(
-        name: "Área de lazer - Recanto Família",
-        phone1: "(17) 99149-0194",
-        phone2: "(17) 99117-0996",
-        place: "Parque do Ipês",
-      ),
-    ].obs;
+    visitPlaces = <Establishment>[].obs;
   }
 
   openFilter() async {
@@ -149,7 +120,7 @@ class MainMenuController extends GetxController {
                   widgetCustom: Align(
                     alignment: Alignment.centerLeft,
                     child: CheckboxListTileWidget(
-                      radioText: _categories[index].name,
+                      radioText: _categories[index].description,
                       size: 4.h,
                       checked: _categories[index].selected,
                       justRead: true,
@@ -159,10 +130,9 @@ class MainMenuController extends GetxController {
                   onTap: () async {
                     setState(() {
                       _categories[index].selected = !_categories[index].selected;
-                      if(allCategoriesSelected && !_categories[index].selected){
+                      if (allCategoriesSelected && !_categories[index].selected) {
                         allCategoriesSelected = _categories[index].selected;
-                      }
-                      else if(!allCategoriesSelected && _categories[index].selected && _categories.length == 1){
+                      } else if (!allCategoriesSelected && _categories[index].selected && _categories.length == 1) {
                         allCategoriesSelected = true;
                       }
                     });
@@ -184,14 +154,13 @@ class MainMenuController extends GetxController {
                   Get.back();
 
                   setState(() {
-                    _categories.sort((a, b) => a.name.compareTo(b.name));
+                    _categories.sort((a, b) => a.description.compareTo(b.description));
                     _categories.sort((a, b) => b.selected.toString().compareTo(a.selected.toString()));
                   });
 
-                  if(_categories.where((element) => element.selected).length == _categories.length){
+                  if (_categories.where((element) => element.selected).length == _categories.length) {
                     //updateList();
-                  }
-                  else{
+                  } else {
                     //_filterListPerCities();
                   }
                 },

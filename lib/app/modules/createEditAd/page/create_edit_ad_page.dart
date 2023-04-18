@@ -1,10 +1,10 @@
 import 'package:catalago_japamix/app/modules/createEditAd/controller/create_edit_ad_controller.dart';
-import 'package:catalago_japamix/base/models/places/places.dart';
+import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreateEditAdPage extends StatefulWidget {
-  final Places? place;
+  final Establishment? place;
 
   const CreateEditAdPage({
     Key? key,

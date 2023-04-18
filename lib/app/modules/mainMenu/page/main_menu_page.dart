@@ -6,6 +6,7 @@ import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
 import '../../createEditAd/controller/create_edit_ad_controller.dart';
+import '../../createEditAd/page/create_edit_ad_page.dart';
 import '../controller/main_menu_controller.dart';
 import '../widget/place_card_widget.dart';
 
@@ -139,7 +140,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                     ),
                   ),
                   floatingActionButton: FloatingActionButton(
-                    onPressed: () => Get.to(() => CreateEditAdController(null)),
+                    onPressed: () => Get.to(() => const CreateEditAdPage()),
                     backgroundColor: AppColors.redColor,
                     elevation: 3,
                     child: Icon(

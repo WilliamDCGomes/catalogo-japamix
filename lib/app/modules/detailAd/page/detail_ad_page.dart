@@ -2,7 +2,7 @@ import 'package:catalago_japamix/app/modules/detailAd/controller/detail_ad_contr
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../../../base/models/places/places.dart';
+import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
@@ -10,11 +10,11 @@ import '../../../utils/stylePages/app_colors.dart';
 import '../widget/picture_ad_widget.dart';
 
 class DetailAdPage extends StatefulWidget {
-  final Places place;
+  final Establishment establishment;
 
   const DetailAdPage({
     Key? key,
-    required this.place,
+    required this.establishment,
   }) : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
 
   @override
   void initState() {
-    controller = Get.put(DetailAdController(widget.place));
+    controller = Get.put(DetailAdController(widget.establishment));
     super.initState();
   }
 
@@ -124,7 +124,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                         Expanded(
                           child: ListView(
                             children: [
-                              if(controller.visitPlace.description != null && controller.visitPlace.description != "")
+                              if (controller.visitPlace.description != null && controller.visitPlace.description != "")
                                 Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,7 +149,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     ),
                                   ],
                                 ),
-                              if(controller.visitPlace.imagesPlace != null && controller.visitPlace.imagesPlace!.isNotEmpty)
+                              if (controller.visitPlace.imagesPlace != null && controller.visitPlace.imagesPlace!.isNotEmpty)
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -178,7 +178,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     ),
                                   ],
                                 ),
-                              if(controller.visitPlace.place != null && controller.visitPlace.place != "")
+                              if (controller.visitPlace.address != null && controller.visitPlace.address != "")
                                 Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,9 +193,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 1.h, bottom: 2.h),
                                       child: TextButton(
-                                        onPressed: () {
-
-                                        },
+                                        onPressed: () {},
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -208,7 +206,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                               width: 4.w,
                                             ),
                                             TextWidget(
-                                              controller.visitPlace.place ?? "",
+                                              controller.visitPlace.address ?? "",
                                               textColor: AppColors.blackColor,
                                               fontSize: 16.sp,
                                               textAlign: TextAlign.center,
@@ -225,17 +223,14 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextWidget(
-                                    "Telefone${(controller.visitPlace.phone2 != null && controller.visitPlace.phone2!.isNotEmpty) ||
-                                        (controller.visitPlace.phone2 != null && controller.visitPlace.phone2!.isNotEmpty) ? "s" : ""} para contato",
+                                    "Telefone${(controller.visitPlace.secondaryTelephone != null && controller.visitPlace.secondaryTelephone!.isNotEmpty) || (controller.visitPlace.secondaryTelephone != null && controller.visitPlace.secondaryTelephone!.isNotEmpty) ? "s" : ""} para contato",
                                     textColor: AppColors.blackColor,
                                     fontSize: 18.sp,
                                     textAlign: TextAlign.center,
                                     fontWeight: FontWeight.bold,
                                   ),
                                   TextButton(
-                                    onPressed: () {
-
-                                    },
+                                    onPressed: () {},
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -248,7 +243,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                           width: 4.w,
                                         ),
                                         TextWidget(
-                                          controller.visitPlace.phone1,
+                                          controller.visitPlace.primaryTelephone,
                                           textColor: AppColors.blackColor,
                                           fontSize: 16.sp,
                                           textAlign: TextAlign.center,
@@ -258,11 +253,10 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                       ],
                                     ),
                                   ),
-                                  if(controller.visitPlace.phone2 != null && controller.visitPlace.phone2 != "")
+                                  if (controller.visitPlace.secondaryTelephone != null &&
+                                      controller.visitPlace.secondaryTelephone != "")
                                     TextButton(
-                                      onPressed: () {
-
-                                      },
+                                      onPressed: () {},
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -275,7 +269,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                             width: 4.w,
                                           ),
                                           TextWidget(
-                                            controller.visitPlace.phone2 ?? "",
+                                            controller.visitPlace.secondaryTelephone ?? "",
                                             textColor: AppColors.blackColor,
                                             fontSize: 16.sp,
                                             textAlign: TextAlign.center,
@@ -285,11 +279,10 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                         ],
                                       ),
                                     ),
-                                  if(controller.visitPlace.phone3 != null && controller.visitPlace.phone3 != "")
+                                  if (controller.visitPlace.tertiaryTelephone != null &&
+                                      controller.visitPlace.tertiaryTelephone != "")
                                     TextButton(
-                                      onPressed: () {
-
-                                      },
+                                      onPressed: () {},
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -302,7 +295,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                             width: 4.w,
                                           ),
                                           TextWidget(
-                                            controller.visitPlace.phone3 ?? "",
+                                            controller.visitPlace.tertiaryTelephone ?? "",
                                             textColor: AppColors.blackColor,
                                             fontSize: 16.sp,
                                             textAlign: TextAlign.center,

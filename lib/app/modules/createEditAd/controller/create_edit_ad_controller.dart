@@ -1,8 +1,8 @@
+import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:get/get.dart';
-import '../../../../base/models/places/places.dart';
 
 class CreateEditAdController extends GetxController {
-  late Places? place;
+  late Establishment? place;
 
   CreateEditAdController(this.place);
 }

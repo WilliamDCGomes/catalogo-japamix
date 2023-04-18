@@ -21,14 +21,6 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       userName: json['userName'] as String,
       password: json['password'] as String?,
     )
-      ..id = json['id'] as String?
-      ..inclusion = json['inclusion'] == null
-          ? null
-          : DateTime.parse(json['inclusion'] as String)
-      ..alteration = json['alteration'] == null
-          ? null
-          : DateTime.parse(json['alteration'] as String)
-      ..active = CatalogoJapamixCore.fromJsonActive(json['active'])
       ..birthdayDate = json['birthdayDate'] == null
           ? null
           : DateTime.parse(json['birthdayDate'] as String)
@@ -45,10 +37,6 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       ..code = json['code'] as int?;
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-      'id': instance.id,
-      'inclusion': instance.inclusion?.toIso8601String(),
-      'alteration': instance.alteration?.toIso8601String(),
-      'active': instance.active,
       'name': instance.name,
       'tellphone': instance.tellphone,
       'birthdayDate': instance.birthdayDate?.toIso8601String(),

@@ -1,5 +1,5 @@
 import 'package:catalago_japamix/app/modules/detailAd/page/detail_ad_page.dart';
-import 'package:catalago_japamix/base/models/places/places.dart';
+import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -7,7 +7,7 @@ import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
 
 class PlaceCardWidget extends StatelessWidget {
-  final Places place;
+  final Establishment place;
 
   const PlaceCardWidget({
     Key? key,
@@ -17,7 +17,7 @@ class PlaceCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => DetailAdPage(place: place)),
+      onTap: () => Get.to(() => DetailAdPage(establishment: place)),
       child: Container(
         padding: EdgeInsets.all(2.h),
         margin: EdgeInsets.only(bottom: 2.h),
@@ -44,7 +44,7 @@ class PlaceCardWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            if(place.place != null && place.place!.isNotEmpty)
+            if (place.address != null && place.address!.isNotEmpty)
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class PlaceCardWidget extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextWidget(
-                          place.place ?? "",
+                          place.address ?? "",
                           textColor: AppColors.blackColor,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
@@ -91,7 +91,7 @@ class PlaceCardWidget extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextWidget(
-                    place.phone1,
+                    place.primaryTelephone,
                     textColor: AppColors.blackColor,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class PlaceCardWidget extends StatelessWidget {
                 ),
               ],
             ),
-            if(place.phone2 != null && place.phone2!.isNotEmpty)
+            if (place.secondaryTelephone != null && place.secondaryTelephone!.isNotEmpty)
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +121,7 @@ class PlaceCardWidget extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextWidget(
-                          place.phone2 ?? "",
+                          place.secondaryTelephone ?? "",
                           textColor: AppColors.blackColor,
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
