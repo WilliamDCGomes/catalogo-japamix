@@ -6,14 +6,15 @@ part of 'japamix_base.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-JapaMixBase _$JapaMixBaseFromJson(Map<String, dynamic> json) => JapaMixBase(
+JapaMixBase<T> _$JapaMixBaseFromJson<T>(Map<String, dynamic> json) =>
+    JapaMixBase<T>(
       id: json['id'] as String,
       inclusion: DateTime.parse(json['inclusion'] as String),
       alteration: DateTime.parse(json['alteration'] as String),
       deleted: json['deleted'] as bool,
     );
 
-Map<String, dynamic> _$JapaMixBaseToJson(JapaMixBase instance) =>
+Map<String, dynamic> _$JapaMixBaseToJson<T>(JapaMixBase<T> instance) =>
     <String, dynamic>{
       'id': instance.id,
       'inclusion': instance.inclusion.toIso8601String(),
