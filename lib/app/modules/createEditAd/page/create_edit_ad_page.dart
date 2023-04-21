@@ -2,6 +2,7 @@ import 'package:catalago_japamix/app/modules/createEditAd/controller/create_edit
 import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../utils/helpers/loading.dart';
 import '../../../utils/helpers/masks_for_text_fields.dart';
@@ -574,8 +575,14 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                                   controller.placeImages[index].path
                                                 ),
                                                 onLongPress: () async => await controller.removePicture(index),
-                                                child: PictureAdWidget(
-                                                  path: controller.placeImages[index].path,
+                                                child: LazyLoadingList(
+                                                  initialSizeOfItems: 2,
+                                                  index: index,
+                                                  loadMore: (){},
+                                                  hasMore: true,
+                                                  child: PictureAdWidget(
+                                                    path: controller.placeImages[index].path,
+                                                  ),
                                                 ),
                                               );
                                             },

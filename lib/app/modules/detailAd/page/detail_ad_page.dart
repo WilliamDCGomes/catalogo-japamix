@@ -1,6 +1,7 @@
 import 'package:catalago_japamix/app/modules/detailAd/controller/detail_ad_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/helpers/paths.dart';
@@ -169,8 +170,14 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                           shrinkWrap: true,
                                           itemCount: controller.visitPlace.imagesPlace.length,
                                           itemBuilder: (context, index) {
-                                            return PictureAdWidget(
-                                              path: controller.visitPlace.imagesPlace[index],
+                                            return LazyLoadingList(
+                                              initialSizeOfItems: 2,
+                                              index: index,
+                                              loadMore: (){},
+                                              hasMore: true,
+                                              child: PictureAdWidget(
+                                                path: controller.visitPlace.imagesPlace[index],
+                                              ),
                                             );
                                           },
                                         ),
