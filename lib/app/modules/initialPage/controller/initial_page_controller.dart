@@ -1,3 +1,4 @@
+import 'package:catalago_japamix/app/modules/mainMenu/page/main_menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
@@ -50,7 +51,8 @@ class InitialPageController extends GetxController {
             _goToNextPage();
           }
         } else {
-          Get.offAll(() => const LoginPage());
+          //Get.offAll(() => const LoginPage());
+          Get.offAll(() => const MainMenuPage());
         }
       } else {
         if (!await _doLoginServerKeepConnected()) {
@@ -60,7 +62,8 @@ class InitialPageController extends GetxController {
         }
       }
     } else {
-      Get.offAll(() => const LoginPage());
+      //Get.offAll(() => const LoginPage());
+      Get.offAll(() => const MainMenuPage());
     }
   }
 

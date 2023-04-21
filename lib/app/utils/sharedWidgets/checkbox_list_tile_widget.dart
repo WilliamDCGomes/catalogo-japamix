@@ -63,17 +63,15 @@ class _CheckboxListTileWidgetState extends State<CheckboxListTileWidget> {
                 ),
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: widget.spaceBetween ?? 2.w),
-                child: TextWidget(
-                  widget.radioText,
-                  textColor: widget.titleColor ?? AppColors.blackColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.sp,
-                  maxLines: 3,
-                  textAlign: TextAlign.start,
-                ),
+            Padding(
+              padding: EdgeInsets.only(left: widget.spaceBetween ?? 2.w),
+              child: TextWidget(
+                widget.radioText,
+                textColor: widget.titleColor ?? AppColors.blackColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 15.sp,
+                maxLines: 3,
+                textAlign: TextAlign.start,
               ),
             ),
           ],

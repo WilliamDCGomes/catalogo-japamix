@@ -79,7 +79,7 @@ class _ConfirmationPopupState extends State<ConfirmationPopup> {
                   ),
                   child: TextWidget(
                     widget.title,
-                    textColor: AppColors.whiteColor,
+                    textColor: AppColors.blackColor,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -126,8 +126,8 @@ class _ConfirmationPopupState extends State<ConfirmationPopup> {
                       widthButton: 32.w,
                       fontWeight: FontWeight.bold,
                       backgroundColor: AppColors.whiteColor,
-                      borderColor: AppColors.defaultColor,
-                      textColor: AppColors.defaultColor,
+                      borderColor: AppColors.redColor,
+                      textColor: AppColors.redColor,
                       onPressed: () {
                         widget.firstButton();
                         Get.back();

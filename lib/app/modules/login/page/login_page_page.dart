@@ -3,7 +3,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../utils/helpers/app_close_controller.dart';
-import '../../../utils/helpers/masks_for_text_fields.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/helpers/text_field_validators.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
@@ -117,8 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                                             width: double.infinity,
                                             hasError: controller.cpfInputHasError.value,
                                             enableSuggestions: true,
-                                            keyboardType: TextInputType.number,
-                                            maskTextInputFormatter: [MasksForTextFields.cpfMask],
+                                            keyboardType: TextInputType.emailAddress,
                                             textInputAction: TextInputAction.next,
                                             validator: (String? value) {
                                               String? validation = TextFieldValidators.cpfValidation(value);

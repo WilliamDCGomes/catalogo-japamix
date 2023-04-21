@@ -189,10 +189,10 @@ class RegisterUserController extends GetxController {
         AddressInformation? addressInformation = await _consultCepService.searchCep(cepTextController.text);
         if(addressInformation != null){
           ufSelected.value = addressInformation.uf;
-          cityTextController.text = addressInformation.city;
-          streetTextController.text = addressInformation.street;
-          neighborhoodTextController.text = addressInformation.neighborhood;
-          complementTextController.text = addressInformation.complement;
+          cityTextController.text = addressInformation.localidade;
+          streetTextController.text = addressInformation.logradouro;
+          neighborhoodTextController.text = addressInformation.bairro;
+          complementTextController.text = addressInformation.complemento;
           formKeyAddressInformation.currentState!.validate();
         }
         else{

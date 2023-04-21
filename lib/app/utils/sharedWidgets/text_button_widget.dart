@@ -45,29 +45,19 @@ class TextButtonWidget extends StatelessWidget {
     return SizedBox(
       height: height,
       width: width,
-      child: TextButton(
-          onPressed: onTap,
-          style: TextButton.styleFrom(
-            foregroundColor: AppColors.blackColor,
-            backgroundColor: AppColors.transparentColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius ?? 0),
-            ),
-            alignment: componentAlignment,
-            padding: componentPadding,
-            maximumSize: maximumSize,
-          ),
-          child: richText ?? (
-            widgetCustom ??
-            TextWidget(
-              hintText ?? "",
-              textColor: AppColors.blackColor,
-              fontSize: fontSize ?? 17.sp,
-              fontWeight: fontWeight ?? FontWeight.bold,
-              textAlign: textAlign,
-              textDecoration: textDecoration,
-            )
-          ),
+      child: InkWell(
+        onTap: onTap,
+        child: richText ?? (
+          widgetCustom ??
+          TextWidget(
+            hintText ?? "",
+            textColor: AppColors.blackColor,
+            fontSize: fontSize ?? 17.sp,
+            fontWeight: fontWeight ?? FontWeight.bold,
+            textAlign: textAlign,
+            textDecoration: textDecoration,
+          )
+        ),
       ),
     );
   }

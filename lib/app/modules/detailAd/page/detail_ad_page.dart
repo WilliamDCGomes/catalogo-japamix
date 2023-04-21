@@ -5,9 +5,9 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
+import '../../../utils/sharedWidgets/picture_ad_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
-import '../widget/picture_ad_widget.dart';
 
 class DetailAdPage extends StatefulWidget {
   final Establishment establishment;
@@ -149,7 +149,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     ),
                                   ],
                                 ),
-                              if (controller.visitPlace.imagesPlace != null && controller.visitPlace.imagesPlace!.isNotEmpty)
+                              if (controller.visitPlace.imagesPlace.isNotEmpty)
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -167,10 +167,10 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                         child: ListView.builder(
                                           scrollDirection: Axis.horizontal,
                                           shrinkWrap: true,
-                                          itemCount: controller.visitPlace.imagesPlace!.length,
+                                          itemCount: controller.visitPlace.imagesPlace.length,
                                           itemBuilder: (context, index) {
                                             return PictureAdWidget(
-                                              path: controller.visitPlace.imagesPlace![index],
+                                              path: controller.visitPlace.imagesPlace[index],
                                             );
                                           },
                                         ),

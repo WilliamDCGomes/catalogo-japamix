@@ -9,17 +9,17 @@ part of 'address_information.dart';
 AddressInformation _$AddressInformationFromJson(Map<String, dynamic> json) =>
     AddressInformation(
       uf: json['uf'] as String,
-      city: json['city'] as String,
-      street: json['street'] as String,
-      neighborhood: json['neighborhood'] as String,
-      complement: json['complement'] as String,
+      localidade: json['localidade'] as String,
+      logradouro: json['logradouro'] as String,
+      bairro: json['bairro'] as String,
+      complemento: json['complemento'] as String,
     );
 
 Map<String, dynamic> _$AddressInformationToJson(AddressInformation instance) =>
     <String, dynamic>{
       'uf': instance.uf,
-      'city': instance.city,
-      'street': instance.street,
-      'neighborhood': instance.neighborhood,
-      'complement': instance.complement,
+      'localidade': instance.localidade,
+      'logradouro': instance.logradouro,
+      'bairro': instance.bairro,
+      'complemento': instance.complemento,
     };

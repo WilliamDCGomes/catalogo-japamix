@@ -5,17 +5,17 @@ part 'address_information.g.dart';
 @JsonSerializable()
 class AddressInformation {
   late String uf;
-  late String city;
-  late String street;
-  late String neighborhood;
-  late String complement;
+  late String localidade;
+  late String logradouro;
+  late String bairro;
+  late String complemento;
 
   AddressInformation({
     required this.uf,
-    required this.city,
-    required this.street,
-    required this.neighborhood,
-    required this.complement,
+    required this.localidade,
+    required this.logradouro,
+    required this.bairro,
+    required this.complemento,
   });
 
   factory AddressInformation.fromJson(Map<String, dynamic> json) => _$AddressInformationFromJson(json);
