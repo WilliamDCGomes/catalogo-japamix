@@ -8,6 +8,7 @@ import '../text_widget.dart';
 
 class ConfirmationPopup extends StatefulWidget {
   final bool? showSecondButton;
+  final bool disableGetBack;
   final String title;
   final String? subTitle;
   final Widget? child;
@@ -23,6 +24,7 @@ class ConfirmationPopup extends StatefulWidget {
     this.subTitle,
     this.firstButtonText,
     this.secondButtonText,
+    this.disableGetBack = false,
     required this.firstButton,
     required this.secondButton,
     this.child,
@@ -130,7 +132,7 @@ class _ConfirmationPopupState extends State<ConfirmationPopup> {
                       textColor: AppColors.redColor,
                       onPressed: () {
                         widget.firstButton();
-                        Get.back();
+                        if(!widget.disableGetBack) Get.back();
                       },
                     ),
                   ),
@@ -141,7 +143,7 @@ class _ConfirmationPopupState extends State<ConfirmationPopup> {
                     fontWeight: FontWeight.bold,
                     onPressed: () {
                       widget.secondButton();
-                      Get.back();
+                      if(!widget.disableGetBack) Get.back();
                     },
                   ),
                 ],

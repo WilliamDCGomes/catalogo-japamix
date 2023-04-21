@@ -44,8 +44,15 @@ class ViewPicture {
           subTitle: "Escolha o método desejado para adicionar a imagem",
           firstButtonText: "GALERIA",
           secondButtonText: "CÂMERA",
-          firstButton: () async => picture = await _getImage(ImageOrigin.gallery),
-          secondButton: () async => picture = await _getImage(ImageOrigin.camera),
+          disableGetBack: true,
+          firstButton: () async {
+            picture = await _getImage(ImageOrigin.gallery);
+            Get.back();
+          },
+          secondButton: () async {
+            picture = await _getImage(ImageOrigin.camera);
+            Get.back();
+          },
         );
       },
     );

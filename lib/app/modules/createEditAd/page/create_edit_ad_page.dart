@@ -573,7 +573,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                                 onTap: () => ViewPicture.openPicture(
                                                   controller.placeImages[index].path
                                                 ),
-                                                onLongPress: () async => await controller.removePicture(),
+                                                onLongPress: () async => await controller.removePicture(index),
                                                 child: PictureAdWidget(
                                                   path: controller.placeImages[index].path,
                                                 ),

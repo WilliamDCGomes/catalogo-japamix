@@ -8,6 +8,7 @@ import '../../../../base/services/consult_cep_service.dart';
 import '../../../../base/services/interfaces/iconsult_cep_service.dart';
 import '../../../utils/helpers/brazil_address_informations.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
+import '../../../utils/sharedWidgets/popups/confirmation_popup.dart';
 import '../../../utils/sharedWidgets/popups/information_popup.dart';
 
 class CreateEditAdController extends GetxController {
@@ -143,7 +144,17 @@ class CreateEditAdController extends GetxController {
     }
   }
 
-  removePicture() async {
-
+  removePicture(int index) async {
+    await showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return ConfirmationPopup(
+          title: "Aviso",
+          subTitle: "Tem certeza que deseja remover a imagem",
+          firstButton: () {},
+          secondButton: () => placeImages.removeAt(index),
+        );
+      },
+    );
   }
 }
