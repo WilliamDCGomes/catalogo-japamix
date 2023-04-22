@@ -1,4 +1,6 @@
+import 'package:catalago_japamix/app/modules/categoryAd/page/category_ad_page.dart';
 import 'package:catalago_japamix/app/utils/helpers/view_picture.dart';
+import 'package:catalago_japamix/base/models/category/category.dart';
 import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,6 +34,7 @@ class CreateEditAdController extends GetxController {
   late FocusNode houseNumberFocusNode;
   late FocusNode neighborhoodFocusNode;
   late FocusNode complementFocusNode;
+  late TextEditingController nameController;
   late TextEditingController descriptionController;
   late TextEditingController phone1TextEditingController;
   late TextEditingController phone2TextEditingController;
@@ -44,15 +47,16 @@ class CreateEditAdController extends GetxController {
   late TextEditingController complementTextController;
   late RxList<String> ufsList;
   late RxList<XFile> placeImages;
+  late RxList<Category> categories;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
   late IConsultCepService _consultCepService;
 
-  CreateEditAdController(this.place){
-    _initializeVariables();
+  CreateEditAdController(this.place, List<Category> categories){
+    _initializeVariables(categories);
     _getUfsNames();
   }
 
-  _initializeVariables(){
+  _initializeVariables(List<Category> categoriesList){
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     ufSelected = "".obs;
     phone1HasError = false.obs;
@@ -73,6 +77,7 @@ class CreateEditAdController extends GetxController {
     houseNumberFocusNode = FocusNode();
     neighborhoodFocusNode = FocusNode();
     complementFocusNode = FocusNode();
+    nameController = TextEditingController();
     descriptionController = TextEditingController();
     phone1TextEditingController = TextEditingController();
     phone2TextEditingController = TextEditingController();
@@ -85,6 +90,14 @@ class CreateEditAdController extends GetxController {
     complementTextController = TextEditingController();
     placeImages = <XFile>[].obs;
     ufsList = <String>[].obs;
+    categories = <Category>[].obs;
+    for(var category in categoriesList){
+      categories.add(
+        Category(
+          name: category.name,
+        ),
+      );
+    }
     _consultCepService = ConsultCepService();
   }
 
@@ -150,11 +163,22 @@ class CreateEditAdController extends GetxController {
       builder: (BuildContext context) {
         return ConfirmationPopup(
           title: "Aviso",
-          subTitle: "Tem certeza que deseja remover a imagem",
+          subTitle: "Tem certeza que deseja remover a imagem?",
           firstButton: () {},
           secondButton: () => placeImages.removeAt(index),
         );
       },
     );
+  }
+
+  openCatories() async {
+    var result = await Get.to(() => CategoryAdPage(categories: categories));
+    if(result != null && result.runtimeType == RxList && (result as RxList).isNotEmpty){
+      categories = (result as RxList<Category>);
+    }
+  }
+
+  addNewAd() async {
+    Get.back(result: categories);
   }
 }

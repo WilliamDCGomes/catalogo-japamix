@@ -3,21 +3,27 @@ import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../../../base/models/category/category.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
 
 class PlaceCardWidget extends StatelessWidget {
   final Establishment place;
+  final List<Category> categories;
 
   const PlaceCardWidget({
     Key? key,
     required this.place,
+    required this.categories,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => DetailAdPage(establishment: place)),
+      onTap: () => Get.to(() => DetailAdPage(
+        establishment: place,
+        categories: categories,
+      )),
       child: Container(
         padding: EdgeInsets.all(2.h),
         margin: EdgeInsets.only(bottom: 2.h),

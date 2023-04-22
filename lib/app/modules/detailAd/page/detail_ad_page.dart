@@ -3,19 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/picture_ad_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
+import '../../createEditAd/page/create_edit_ad_page.dart';
 
 class DetailAdPage extends StatefulWidget {
   final Establishment establishment;
+  final List<Category> categories;
 
   const DetailAdPage({
     Key? key,
     required this.establishment,
+    required this.categories,
   }) : super(key: key);
 
   @override
@@ -95,6 +99,20 @@ class _DetailAdPageState extends State<DetailAdPage> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: InkWell(
+                            onTap: () => Get.to(() => CreateEditAdPage(
+                              place: widget.establishment,
+                              categories: widget.categories,
+                            )),
+                            child: Icon(
+                              Icons.edit,
+                              color: AppColors.blackColor,
+                              size: 3.h,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     elevation: 5,
@@ -162,7 +180,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(bottom: 2.h),
+                                      padding: EdgeInsets.only(top: 1.h, bottom: 2.h),
                                       child: SizedBox(
                                         height: 20.h,
                                         child: ListView.builder(
@@ -176,6 +194,9 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                               loadMore: (){},
                                               hasMore: true,
                                               child: PictureAdWidget(
+                                                ///TODO: Colocado apenas para mostrar imagens exemplo, tirar quando for trazer as imagens do banco
+                                                fromAsset: true,
+                                                ///TODO: Colocado apenas para mostrar imagens exemplo, tirar quando for trazer as imagens do banco
                                                 path: controller.visitPlace.imagesPlace[index],
                                               ),
                                             );

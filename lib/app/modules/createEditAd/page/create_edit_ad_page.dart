@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../../../base/models/category/category.dart';
 import '../../../utils/helpers/loading.dart';
 import '../../../utils/helpers/masks_for_text_fields.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/helpers/platform_type.dart';
 import '../../../utils/helpers/text_field_validators.dart';
 import '../../../utils/helpers/view_picture.dart';
+import '../../../utils/sharedWidgets/button_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
 import '../../../utils/sharedWidgets/dropdown_button_widget.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
@@ -21,10 +23,12 @@ import '../../../utils/stylePages/app_colors.dart';
 
 class CreateEditAdPage extends StatefulWidget {
   final Establishment? place;
+  final List<Category> categories;
 
   const CreateEditAdPage({
     Key? key,
     this.place,
+    required this.categories,
   }) : super(key: key);
 
   @override
@@ -36,7 +40,10 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
 
   @override
   void initState() {
-    controller = Get.put(CreateEditAdController(widget.place));
+    controller = Get.put(CreateEditAdController(
+      widget.place,
+      widget.categories,
+    ));
     super.initState();
   }
 
@@ -104,6 +111,17 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: InkWell(
+                            onTap: () => controller.openCatories(),
+                            child: Icon(
+                              Icons.category_outlined,
+                              color: AppColors.blackColor,
+                              size: 3.h,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     elevation: 5,
@@ -112,6 +130,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                   body: Padding(
                     padding: EdgeInsets.only(left: 4.w, top: 15.h, right: 4.w),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
@@ -136,6 +155,28 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                           child: ListView(
                             shrinkWrap: true,
                             children: [
+                              TextWidget(
+                                "Nome",
+                                textColor: AppColors.blackColor,
+                                fontSize: 18.sp,
+                                textAlign: TextAlign.start,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              TextFieldWidget(
+                                controller: controller.nameController,
+                                hintText: "Informe o nome do anúncio",
+                                textCapitalization: TextCapitalization.sentences,
+                                width: double.infinity,
+                                keyboardType: TextInputType.text,
+                                enableSuggestions: true,
+                                textInputAction: TextInputAction.next,
+                                onEditingComplete: (){
+                                  controller.descriptionFocusNode.requestFocus();
+                                },
+                              ),
                               TextWidget(
                                 "Descrição",
                                 textColor: AppColors.blackColor,
@@ -183,7 +224,6 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                 height: 1.h,
                               ),
                               Row(
-                                mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
@@ -227,32 +267,39 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                           SizedBox(
                                             height: 2.h,
                                           ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Obx(
-                                                () => CheckboxListTileWidget(
-                                                  radioText: "Sim",
-                                                  checked: controller.phoneItsWhatsapp.value,
-                                                  onChanged: () {
-                                                    controller.phoneItsWhatsapp.value = !controller.phoneItsWhatsapp.value;
-                                                  },
+                                          SizedBox(
+                                            width: 32.w,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Expanded(
+                                                  child: Obx(
+                                                    () => CheckboxListTileWidget(
+                                                      radioText: "Sim",
+                                                      checked: controller.phoneItsWhatsapp.value,
+                                                      onChanged: () {
+                                                        controller.phoneItsWhatsapp.value = !controller.phoneItsWhatsapp.value;
+                                                      },
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                width: 4.w,
-                                              ),
-                                              Obx(
-                                                () => CheckboxListTileWidget(
-                                                  radioText: "Não",
-                                                  size: 1.h,
-                                                  checked: !controller.phoneItsWhatsapp.value,
-                                                  onChanged: () {
-                                                    controller.phoneItsWhatsapp.value = !controller.phoneItsWhatsapp.value;
-                                                  },
+                                                SizedBox(
+                                                  width: 4.w,
                                                 ),
-                                              ),
-                                            ],
+                                                Expanded(
+                                                  child: Obx(
+                                                    () => CheckboxListTileWidget(
+                                                      radioText: "Não",
+                                                      size: 1.h,
+                                                      checked: !controller.phoneItsWhatsapp.value,
+                                                      onChanged: () {
+                                                        controller.phoneItsWhatsapp.value = !controller.phoneItsWhatsapp.value;
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -593,6 +640,15 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 1.h),
+                          child: ButtonWidget(
+                            hintText: "SALVAR",
+                            fontWeight: FontWeight.bold,
+                            widthButton: double.infinity,
+                            onPressed: () => controller.addNewAd(),
                           ),
                         ),
                       ],

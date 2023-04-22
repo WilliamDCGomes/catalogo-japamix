@@ -5,34 +5,42 @@ import '../stylePages/app_colors.dart';
 
 class PictureAdWidget extends StatelessWidget {
   final String path;
+  final bool fromAsset;
 
   const PictureAdWidget({
     Key? key,
     required this.path,
+    this.fromAsset = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-    height: 20.h,
-    width: 70.w,
-    margin: EdgeInsets.only(right: 2.w),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(2.h),
-      border: Border.all(
-        color: AppColors.blackColor,
-        width: .25.h,
-      ),
-      image: DecorationImage(
-        alignment: Alignment.bottomCenter,
-        fit: BoxFit.fitWidth,
-        image: MemoryImage(
-          File(
+      height: 20.h,
+      width: 70.w,
+      margin: EdgeInsets.only(right: 2.w),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(2.h),
+        border: Border.all(
+          color: AppColors.blackColor,
+          width: .25.h,
+        ),
+        image: fromAsset ? DecorationImage(
+          alignment: Alignment.bottomCenter,
+          fit: BoxFit.fitWidth,
+          image: AssetImage(
             path,
-          ).readAsBytesSync(),
+          ),
+        ) : DecorationImage(
+          alignment: Alignment.bottomCenter,
+          fit: BoxFit.fitWidth,
+          image: MemoryImage(
+            File(
+              path,
+            ).readAsBytesSync(),
+          ),
         ),
       ),
-    ),
-      );
+    );
   }
 }

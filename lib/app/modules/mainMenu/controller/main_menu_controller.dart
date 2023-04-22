@@ -2,81 +2,84 @@ import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
+import '../../../utils/sharedWidgets/category_ad_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 import '../../../utils/sharedWidgets/popups/default_popup_widget.dart';
 import '../../../utils/sharedWidgets/text_button_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
+import '../../createEditAd/page/create_edit_ad_page.dart';
 
 class MainMenuController extends GetxController {
+  late bool allCategoriesSelected;
   late TextEditingController searchByName;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
   late RxList<Establishment> visitPlaces;
-  late List<Category> _categories;
+  late List<Category> categories;
 
   MainMenuController() {
     _initializeVariables();
   }
 
   _initializeVariables() {
+    allCategoriesSelected = true;
     searchByName = TextEditingController();
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
-    _categories = <Category>[
+    categories = <Category>[
       Category(
-        id: const Uuid().v4(),
-        description: "Áreas de lazer para eventos e diversão em geral",
+        name: "Áreas de lazer para eventos e diversão em geral",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Cabeleireiros e barbearias",
+        name: "Cabeleireiros e barbearias",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Lista de delivery com a maior opção para sua fome",
+        name: "Lista de delivery com a maior opção para sua fome",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Açai, Assados, Food Truck, Sucos e Pizzarias",
+        name: "Açai, Assados, Food Truck, Sucos e Pizzarias",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Café da Manhã",
+        name: "Café da Manhã",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Salgados para festa, bolos e doces em geral",
+        name: "Salgados para festa, bolos e doces em geral",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Restaurantes e marmitarias",
+        name: "Restaurantes e marmitarias",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Farmácias e Drogarias",
+        name: "Farmácias e Drogarias",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Motorista de Aplicativo",
+        name: "Motorista de Aplicativo",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Mototáxi, táxi e motorista de app",
+        name: "Mototáxi, táxi e motorista de app",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Fretes em Geral",
+        name: "Fretes em Geral",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Profissionais da Construção Civil",
+        name: "Profissionais da Construção Civil",
+        selected: true,
       ),
       Category(
-        id: const Uuid().v4(),
-        description: "Manicures, pedicures e podólogas",
+        name: "Manicures, pedicures e podólogas",
+        selected: true,
       ),
     ];
     visitPlaces = <Establishment>[
@@ -141,7 +144,6 @@ class MainMenuController extends GetxController {
   }
 
   openFilter() async {
-    bool allCategoriesSelected = true;
     await showDialog(
       context: Get.context!,
       builder: (context) => StatefulBuilder(
@@ -163,7 +165,7 @@ class MainMenuController extends GetxController {
               onTap: () async {
                 setState(() {
                   allCategoriesSelected = !allCategoriesSelected;
-                  for (var user in _categories) {
+                  for (var user in categories) {
                     user.selected = allCategoriesSelected;
                   }
                 });
@@ -172,26 +174,20 @@ class MainMenuController extends GetxController {
             SizedBox(
               height: 40.h,
               child: ListView.builder(
-                itemCount: _categories.length,
+                itemCount: categories.length,
                 padding: EdgeInsets.zero,
-                itemBuilder: (context, index) => TextButtonWidget(
-                  widgetCustom: Align(
-                    alignment: Alignment.centerLeft,
-                    child: CheckboxListTileWidget(
-                      radioText: _categories[index].description,
-                      size: 4.h,
-                      checked: _categories[index].selected,
-                      justRead: true,
-                      onChanged: () {},
-                    ),
-                  ),
+                itemBuilder: (context, index) => CategoryAdWidget(
+                  category: categories[index],
+                  disableStyle: true,
                   onTap: () async {
                     setState(() {
-                      _categories[index].selected = !_categories[index].selected;
-                      if (allCategoriesSelected && !_categories[index].selected) {
-                        allCategoriesSelected = _categories[index].selected;
-                      } else if (!allCategoriesSelected && _categories[index].selected && _categories.length == 1) {
-                        allCategoriesSelected = true;
+                      categories[index].selected = !categories[index].selected;
+                      if(allCategoriesSelected && !categories[index].selected){
+                        allCategoriesSelected = categories[index].selected;
+                      }
+                      else {
+                        allCategoriesSelected = (!allCategoriesSelected && categories[index].selected && categories.length == 1) ||
+                            (!allCategoriesSelected && categories.where((category) => category.selected).length == categories.length);
                       }
                     });
                   },
@@ -212,11 +208,11 @@ class MainMenuController extends GetxController {
                   Get.back();
 
                   setState(() {
-                    _categories.sort((a, b) => a.description.compareTo(b.description));
-                    _categories.sort((a, b) => b.selected.toString().compareTo(a.selected.toString()));
+                    categories.sort((a, b) => a.name.compareTo(b.name));
+                    categories.sort((a, b) => b.selected.toString().compareTo(a.selected.toString()));
                   });
 
-                  if (_categories.where((element) => element.selected).length == _categories.length) {
+                  if (categories.where((element) => element.selected).length == categories.length) {
                     //updateList();
                   } else {
                     //_filterListPerCities();
@@ -228,5 +224,13 @@ class MainMenuController extends GetxController {
         ),
       ),
     );
+  }
+
+  addAd() async {
+    var result = Get.to(() => CreateEditAdPage(categories: categories));
+
+    if(result != null && result.runtimeType == RxList && (result as RxList).isNotEmpty){
+      categories = (result as List<Category>);
+    }
   }
 }
