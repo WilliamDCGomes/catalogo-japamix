@@ -1,7 +1,9 @@
 import 'package:catalago_japamix/base/services/base/base_service.dart';
 import '../models/establishmentMedia/establishment_media.dart';
+import 'interfaces/iestablishment_media_service.dart';
 
-class EstablishmentMediaMediaService extends BaseService {
+class EstablishmentMediaService extends BaseService implements IEstablishmentMediaService {
+  @override
   Future<List<EstablishmentMedia>> getAll() async {
     try {
       final response = await get('$baseUrlApi/EstablishmentMedia/GetAll');
@@ -12,6 +14,7 @@ class EstablishmentMediaMediaService extends BaseService {
     }
   }
 
+  @override
   Future<EstablishmentMedia?> getById(String id) async {
     try {
       final response = await get('$baseUrlApi/EstablishmentMedia/GetById', query: {"Id": id});
@@ -22,6 +25,7 @@ class EstablishmentMediaMediaService extends BaseService {
     }
   }
 
+  @override
   Future<bool> createOrEdit(EstablishmentMedia establishmentMedia) async {
     try {
       final response = await post('$baseUrlApi/EstablishmentMedia/CreateOrEdit', establishmentMedia.toJson());
@@ -32,6 +36,7 @@ class EstablishmentMediaMediaService extends BaseService {
     }
   }
 
+  @override
   Future<bool> deleteEstablishmentMedia(String id) async {
     try {
       final response = await delete('$baseUrlApi/EstablishmentMedia/Delete', query: {"Id": id});

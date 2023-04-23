@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -25,21 +26,21 @@ class PictureAdWidget extends StatelessWidget {
           color: AppColors.blackColor,
           width: .25.h,
         ),
-        image: fromAsset ? DecorationImage(
-          alignment: Alignment.bottomCenter,
-          fit: BoxFit.fitWidth,
-          image: AssetImage(
-            path,
-          ),
-        ) : DecorationImage(
-          alignment: Alignment.bottomCenter,
-          fit: BoxFit.fitWidth,
-          image: MemoryImage(
-            File(
-              path,
-            ).readAsBytesSync(),
-          ),
-        ),
+        image: fromAsset
+            ? DecorationImage(
+                alignment: Alignment.bottomCenter,
+                fit: BoxFit.fitWidth,
+                image: AssetImage(
+                  path,
+                ),
+              )
+            : DecorationImage(
+                alignment: Alignment.bottomCenter,
+                fit: BoxFit.fitWidth,
+                image: MemoryImage(
+                  base64Decode(path),
+                ),
+              ),
       ),
     );
   }

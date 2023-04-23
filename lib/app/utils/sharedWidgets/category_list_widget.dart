@@ -20,7 +20,7 @@ class CategoryListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GroupedListView<dynamic, String>(
       elements: itens.map((e) => e.toJson()).toList(),
-      groupBy: (place) => categories.firstWhere((category) => category.id == place["categoryId"]).name,
+      groupBy: (place) => categories.firstWhere((category) => category.id == place["categoryId"]).description,
       groupSeparatorBuilder: (String groupByValue) => Padding(
         padding: EdgeInsets.only(bottom: 1.h),
         child: TextWidget(

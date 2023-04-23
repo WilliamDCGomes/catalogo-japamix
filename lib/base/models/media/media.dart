@@ -23,7 +23,10 @@ class Media extends JapaMixBase {
 }
 
 enum MediaExtension {
+  @JsonValue(0)
   png,
+  @JsonValue(1)
   jpeg,
+  @JsonValue(2)
   jpg;
 }

@@ -173,7 +173,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                 keyboardType: TextInputType.text,
                                 enableSuggestions: true,
                                 textInputAction: TextInputAction.next,
-                                onEditingComplete: (){
+                                onEditingComplete: () {
                                   controller.descriptionFocusNode.requestFocus();
                                 },
                               ),
@@ -198,7 +198,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                 keyboardType: TextInputType.text,
                                 enableSuggestions: true,
                                 textInputAction: TextInputAction.next,
-                                onEditingComplete: (){
+                                onEditingComplete: () {
                                   controller.phone1FocusNode.requestFocus();
                                 },
                               ),
@@ -242,7 +242,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                         controller.phone1HasError.value = validation != null && validation != "";
                                         return validation;
                                       },
-                                      onEditingComplete: (){
+                                      onEditingComplete: () {
                                         controller.phone2FocusNode.requestFocus();
                                       },
                                     ),
@@ -278,7 +278,8 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                                       radioText: "Sim",
                                                       checked: controller.phoneItsWhatsapp.value,
                                                       onChanged: () {
-                                                        controller.phoneItsWhatsapp.value = !controller.phoneItsWhatsapp.value;
+                                                        controller.phoneItsWhatsapp.value =
+                                                            !controller.phoneItsWhatsapp.value;
                                                       },
                                                     ),
                                                   ),
@@ -293,7 +294,8 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                                       size: 1.h,
                                                       checked: !controller.phoneItsWhatsapp.value,
                                                       onChanged: () {
-                                                        controller.phoneItsWhatsapp.value = !controller.phoneItsWhatsapp.value;
+                                                        controller.phoneItsWhatsapp.value =
+                                                            !controller.phoneItsWhatsapp.value;
                                                       },
                                                     ),
                                                   ),
@@ -328,7 +330,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                         controller.phone2HasError.value = validation != null && validation != "";
                                         return validation;
                                       },
-                                      onEditingComplete: (){
+                                      onEditingComplete: () {
                                         controller.phone3FocusNode.requestFocus();
                                       },
                                     ),
@@ -352,7 +354,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                         controller.phone3HasError.value = validation != null && validation != "";
                                         return validation;
                                       },
-                                      onEditingComplete: (){
+                                      onEditingComplete: () {
                                         controller.cepFocusNode.requestFocus();
                                       },
                                     ),
@@ -390,7 +392,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                     maskTextInputFormatter: [MasksForTextFields.cepMask],
                                     hasError: controller.cepInputHasError.value,
                                     onChanged: (value) async {
-                                      if(value.length == 9){
+                                      if (value.length == 9) {
                                         await Loading.startAndPauseLoading(
                                           () => controller.searchAddressInformation(),
                                           controller.loadingWithSuccessOrErrorWidget,
@@ -399,10 +401,9 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                     },
                                     validator: (String? value) {
                                       String? validation = TextFieldValidators.minimumNumberValidation(value, 9, "Cep");
-                                      if(validation != null && validation != ""){
+                                      if (validation != null && validation != "") {
                                         controller.cepInputHasError.value = true;
-                                      }
-                                      else{
+                                      } else {
                                         controller.cepInputHasError.value = false;
                                       }
                                       return validation;
@@ -425,7 +426,8 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                             bottom: PlatformType.isTablet(context) ? 1.7.h : 2.6.h,
                                           ),
                                           child: DropdownButtonWidget(
-                                            itemSelected: controller.ufSelected.value == "" ? null : controller.ufSelected.value,
+                                            itemSelected:
+                                                controller.ufSelected.value == "" ? null : controller.ufSelected.value,
                                             hintText: "Uf",
                                             height: PlatformType.isTablet(context) ? 5.6.h : 6.5.h,
                                             width: 23.w,
@@ -446,16 +448,16 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                             textInputAction: TextInputAction.next,
                                             hasError: controller.cityInputHasError.value,
                                             validator: (String? value) {
-                                              String? validation = TextFieldValidators.standardValidation(value, "Informe a Cidade");
-                                              if(validation != null && validation != ""){
+                                              String? validation =
+                                                  TextFieldValidators.standardValidation(value, "Informe a Cidade");
+                                              if (validation != null && validation != "") {
                                                 controller.cityInputHasError.value = true;
-                                              }
-                                              else{
+                                              } else {
                                                 controller.cityInputHasError.value = false;
                                               }
                                               return validation;
                                             },
-                                            onEditingComplete: (){
+                                            onEditingComplete: () {
                                               controller.streetFocusNode.requestFocus();
                                             },
                                           ),
@@ -483,16 +485,16 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                           textInputAction: TextInputAction.next,
                                           hasError: controller.streetInputHasError.value,
                                           validator: (String? value) {
-                                            String? validation = TextFieldValidators.standardValidation(value, "Informe o Logradouro");
-                                            if(validation != null && validation != ""){
+                                            String? validation =
+                                                TextFieldValidators.standardValidation(value, "Informe o Logradouro");
+                                            if (validation != null && validation != "") {
                                               controller.streetInputHasError.value = true;
-                                            }
-                                            else{
+                                            } else {
                                               controller.streetInputHasError.value = false;
                                             }
                                             return validation;
                                           },
-                                          onEditingComplete: (){
+                                          onEditingComplete: () {
                                             controller.houseNumberFocusNode.requestFocus();
                                           },
                                         ),
@@ -508,7 +510,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                         height: PlatformType.isTablet(context) ? 7.h : 9.h,
                                         width: 20.w,
                                         keyboardType: TextInputType.number,
-                                        onEditingComplete: (){
+                                        onEditingComplete: () {
                                           controller.neighborhoodFocusNode.requestFocus();
                                         },
                                       ),
@@ -532,15 +534,14 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                     hasError: controller.neighborhoodInputHasError.value,
                                     validator: (String? value) {
                                       String? validation = TextFieldValidators.standardValidation(value, "Informe o Bairro");
-                                      if(validation != null && validation != ""){
+                                      if (validation != null && validation != "") {
                                         controller.neighborhoodInputHasError.value = true;
-                                      }
-                                      else{
+                                      } else {
                                         controller.neighborhoodInputHasError.value = false;
                                       }
                                       return validation;
                                     },
-                                    onEditingComplete: (){
+                                    onEditingComplete: () {
                                       controller.complementFocusNode.requestFocus();
                                     },
                                   ),
@@ -549,8 +550,8 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                               Padding(
                                 padding: EdgeInsets.only(top: 1.h),
                                 child: TextFieldWidget(
-                                  focusNode: controller.complementFocusNode,
-                                  controller: controller.complementTextController,
+                                  focusNode: controller.latitudeFocusNode,
+                                  controller: controller.latitudeController,
                                   hintText: "Complemento",
                                   textCapitalization: TextCapitalization.sentences,
                                   height: PlatformType.isTablet(context) ? 7.h : 9.h,
@@ -558,6 +559,58 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                   keyboardType: TextInputType.text,
                                   enableSuggestions: true,
                                 ),
+                              ),
+                              SizedBox(
+                                height: 1.h,
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: TextFieldWidget(
+                                      focusNode: controller.phone2FocusNode,
+                                      controller: controller.phone2TextEditingController,
+                                      hintText: "Latitude",
+                                      textInputAction: TextInputAction.next,
+                                      height: PlatformType.isTablet(context) ? 7.h : 9.h,
+                                      width: double.infinity,
+                                      keyboardType: TextInputType.phone,
+                                      maskTextInputFormatter: [MasksForTextFields.phoneNumberMask],
+                                      hasError: controller.phone2HasError.value,
+                                      validator: (String? value) {
+                                        String? validation = TextFieldValidators.phoneValidation(value);
+                                        controller.phone2HasError.value = validation != null && validation != "";
+                                        return validation;
+                                      },
+                                      onEditingComplete: () {
+                                        controller.phone3FocusNode.requestFocus();
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  Expanded(
+                                    child: TextFieldWidget(
+                                      focusNode: controller.phone3FocusNode,
+                                      controller: controller.phone3TextEditingController,
+                                      hintText: "Longitude",
+                                      textInputAction: TextInputAction.next,
+                                      height: PlatformType.isTablet(context) ? 7.h : 9.h,
+                                      width: double.infinity,
+                                      keyboardType: TextInputType.phone,
+                                      maskTextInputFormatter: [MasksForTextFields.phoneNumberMask],
+                                      hasError: controller.phone3HasError.value,
+                                      validator: (String? value) {
+                                        String? validation = TextFieldValidators.phoneValidation(value);
+                                        controller.phone3HasError.value = validation != null && validation != "";
+                                        return validation;
+                                      },
+                                      onEditingComplete: () {
+                                        controller.cepFocusNode.requestFocus();
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                               SizedBox(
                                 height: 1.h,
@@ -610,7 +663,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                             ),
                                           ),
                                         ),
-                                        if(controller.placeImages.isNotEmpty)
+                                        if (controller.placeImages.isNotEmpty)
                                           ListView.builder(
                                             scrollDirection: Axis.horizontal,
                                             physics: const NeverScrollableScrollPhysics(),
@@ -618,17 +671,15 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                             itemCount: controller.placeImages.length,
                                             itemBuilder: (context, index) {
                                               return InkWell(
-                                                onTap: () => ViewPicture.openPicture(
-                                                  controller.placeImages[index].path
-                                                ),
+                                                onTap: () => ViewPicture.openPicture(controller.placeImages[index]),
                                                 onLongPress: () async => await controller.removePicture(index),
                                                 child: LazyLoadingList(
                                                   initialSizeOfItems: 2,
                                                   index: index,
-                                                  loadMore: (){},
+                                                  loadMore: () {},
                                                   hasMore: true,
                                                   child: PictureAdWidget(
-                                                    path: controller.placeImages[index].path,
+                                                    path: controller.placeImages[index],
                                                   ),
                                                 ),
                                               );

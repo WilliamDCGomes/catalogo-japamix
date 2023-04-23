@@ -6,14 +6,29 @@ part 'category.g.dart';
 
 @JsonSerializable()
 class Category extends JapaMixBase {
-  final String name;
+  final String description;
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool selected;
 
   Category({
-    required this.name,
+    required this.description,
+    required super.id,
+    required super.inclusion,
+    DateTime? alteration,
+    super.deleted = false,
     this.selected = false,
-  }) : super(id: const Uuid().v4(), inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false);
+  }) : super(alteration: alteration ?? DateTime.now());
+
+  Category copyWith(Category category) {
+    return Category(
+      description: category.description,
+      id: category.id,
+      inclusion: category.inclusion,
+      deleted: category.deleted,
+      selected: category.selected,
+      alteration: category.alteration,
+    );
+  }
 
   factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 

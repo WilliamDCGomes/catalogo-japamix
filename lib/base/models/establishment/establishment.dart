@@ -8,18 +8,27 @@ class Establishment extends JapaMixBase {
   final String name;
   final String? description;
   final String primaryTelephone;
+  final bool primaryTelephoneIsWhatsapp;
   final String? secondaryTelephone;
   final String? tertiaryTelephone;
   final String? address;
   final String? number;
   final String? district;
   final String? city;
+  final String? cep;
   final String? state;
+  final String? complement;
   final String? latitude;
   final String? longitude;
-  final String categoryId;
+  final String? categoryId;
+  @JsonKey(includeIfNull: false)
+  final List<String>? establishmentMediaIds;
+  @JsonKey(includeIfNull: false)
+  final List<String>? categoryIds;
   @JsonKey(includeToJson: false, includeFromJson: false)
-  final List<String> imagesPlace;
+  late List<String> imagesPlace;
+
+  String get completeAddress => '$address, $number, $district, $city, $state, $cep';
 
   Establishment({
     required this.name,
@@ -32,12 +41,19 @@ class Establishment extends JapaMixBase {
     required this.district,
     required this.city,
     required this.state,
+    required this.complement,
     required this.latitude,
     required this.longitude,
     required this.categoryId,
+    required this.cep,
+    required this.primaryTelephoneIsWhatsapp,
     required super.id,
-    this.imagesPlace = const [],
-  }) : super(inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false);
+    List<String>? imagesPlace,
+    this.establishmentMediaIds,
+    this.categoryIds,
+  }) : super(inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false) {
+    this.imagesPlace = [];
+  }
 
   factory Establishment.fromJson(Map<String, dynamic> json) => _$EstablishmentFromJson(json);
 

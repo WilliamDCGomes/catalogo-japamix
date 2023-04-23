@@ -1,13 +1,28 @@
+import 'dart:convert';
+
+import 'package:catalago_japamix/app/modules/mainMenu/controller/main_menu_controller.dart';
 import 'package:catalago_japamix/app/modules/categoryAd/page/category_ad_page.dart';
 import 'package:catalago_japamix/app/utils/helpers/view_picture.dart';
 import 'package:catalago_japamix/base/models/category/category.dart';
 import 'package:catalago_japamix/base/models/establishment/establishment.dart';
+import 'package:catalago_japamix/base/models/establishmentMedia/establishment_media.dart';
+import 'package:catalago_japamix/base/services/establishment_media_service.dart';
+import 'package:catalago_japamix/base/services/establishment_service.dart';
+import 'package:catalago_japamix/base/services/interfaces/iestablishment_category_service.dart';
+import 'package:catalago_japamix/base/services/interfaces/iestablishment_service.dart';
+import 'package:catalago_japamix/base/services/interfaces/imedia_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../base/models/addressInformation/address_information.dart';
+import '../../../../base/models/establishmentCategory/establishment_category.dart';
+import '../../../../base/models/media/media.dart';
 import '../../../../base/services/consult_cep_service.dart';
+import '../../../../base/services/establishment_category_service.dart';
 import '../../../../base/services/interfaces/iconsult_cep_service.dart';
+import '../../../../base/services/interfaces/iestablishment_media_service.dart';
+import '../../../../base/services/media_service.dart';
 import '../../../utils/helpers/brazil_address_informations.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 import '../../../utils/sharedWidgets/popups/confirmation_popup.dart';
@@ -23,7 +38,9 @@ class CreateEditAdController extends GetxController {
   late RxBool cityInputHasError;
   late RxBool streetInputHasError;
   late RxBool neighborhoodInputHasError;
+  late RxBool nameHasError;
   late RxBool phoneItsWhatsapp;
+  late FocusNode nameFocusNode;
   late FocusNode descriptionFocusNode;
   late FocusNode phone1FocusNode;
   late FocusNode phone2FocusNode;
@@ -34,6 +51,8 @@ class CreateEditAdController extends GetxController {
   late FocusNode houseNumberFocusNode;
   late FocusNode neighborhoodFocusNode;
   late FocusNode complementFocusNode;
+  late FocusNode latitudeFocusNode;
+  late FocusNode longitudeFocusNode;
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   late TextEditingController phone1TextEditingController;
@@ -45,18 +64,24 @@ class CreateEditAdController extends GetxController {
   late TextEditingController houseNumberTextController;
   late TextEditingController neighborhoodTextController;
   late TextEditingController complementTextController;
+  late TextEditingController latitudeController;
+  late TextEditingController longitudeController;
   late RxList<String> ufsList;
-  late RxList<XFile> placeImages;
+  late RxList<String> placeImages;
   late RxList<Category> categories;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
   late IConsultCepService _consultCepService;
+  late final IEstablishmentService _establishmentService;
+  late final IEstablishmentMediaService _establishmentMediaService;
+  late final IMediaService _mediaService;
+  late final IEstablishmentCategoryService _establishmentCategoryService;
 
-  CreateEditAdController(this.place, List<Category> categories){
+  CreateEditAdController(this.place, List<Category> categories) {
     _initializeVariables(categories);
     _getUfsNames();
   }
 
-  _initializeVariables(List<Category> categoriesList){
+  _initializeVariables(List<Category> categoriesList) {
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     ufSelected = "".obs;
     phone1HasError = false.obs;
@@ -66,7 +91,9 @@ class CreateEditAdController extends GetxController {
     cityInputHasError = false.obs;
     streetInputHasError = false.obs;
     neighborhoodInputHasError = false.obs;
-    phoneItsWhatsapp = false.obs;
+    nameHasError = false.obs;
+    phoneItsWhatsapp = place?.primaryTelephoneIsWhatsapp == null ? false.obs : place!.primaryTelephoneIsWhatsapp.obs;
+    nameFocusNode = FocusNode();
     descriptionFocusNode = FocusNode();
     phone1FocusNode = FocusNode();
     phone2FocusNode = FocusNode();
@@ -77,60 +104,69 @@ class CreateEditAdController extends GetxController {
     houseNumberFocusNode = FocusNode();
     neighborhoodFocusNode = FocusNode();
     complementFocusNode = FocusNode();
-    nameController = TextEditingController();
-    descriptionController = TextEditingController();
-    phone1TextEditingController = TextEditingController();
-    phone2TextEditingController = TextEditingController();
-    phone3TextEditingController = TextEditingController();
-    cepTextController = TextEditingController();
-    cityTextController = TextEditingController();
-    streetTextController = TextEditingController();
-    houseNumberTextController = TextEditingController();
-    neighborhoodTextController = TextEditingController();
-    complementTextController = TextEditingController();
-    placeImages = <XFile>[].obs;
+    latitudeFocusNode = FocusNode();
+    longitudeFocusNode = FocusNode();
+    nameController = TextEditingController(
+      text: place?.name ?? "",
+    );
+    descriptionController = TextEditingController(text: place?.description ?? "");
+    phone1TextEditingController = TextEditingController(text: place?.primaryTelephone ?? "");
+    phone2TextEditingController = TextEditingController(text: place?.secondaryTelephone ?? "");
+    phone3TextEditingController = TextEditingController(text: place?.tertiaryTelephone ?? "");
+    cepTextController = TextEditingController(text: place?.cep ?? "");
+    cityTextController = TextEditingController(text: place?.city ?? "");
+    streetTextController = TextEditingController(text: place?.address ?? "");
+    houseNumberTextController = TextEditingController(text: place?.number ?? "");
+    neighborhoodTextController = TextEditingController(text: place?.district ?? "");
+    complementTextController = TextEditingController(text: place?.complement ?? "");
+    latitudeController = TextEditingController(text: place?.latitude ?? "");
+    longitudeController = TextEditingController(text: place?.longitude ?? "");
+    placeImages = place?.imagesPlace.isEmpty ?? true ? <String>[].obs : (place!.imagesPlace).obs;
     ufsList = <String>[].obs;
     categories = <Category>[].obs;
-    for(var category in categoriesList){
-      categories.add(
-        Category(
-          name: category.name,
-        ),
-      );
+    for (var category in categoriesList) {
+      final categoryToAdd = category.copyWith(category);
+      if (place != null && place!.categoryIds != null && place!.categoryIds!.contains(categoryToAdd.id)) {
+        categoryToAdd.selected = true;
+      }
+      categories.add(categoryToAdd);
     }
     _consultCepService = ConsultCepService();
+    _establishmentService = EstablishmentService();
+    _establishmentMediaService = EstablishmentMediaService();
+    _mediaService = MediaService();
+    _establishmentCategoryService = EstablishmentCategoryService();
   }
 
   _getUfsNames() async {
-    try{
+    try {
       ufsList.clear();
       List<String> states = await BrazilAddressInformations.getUfsNames();
-      for(var uf in states) {
+      for (var uf in states) {
         ufsList.add(uf);
       }
-    }
-    catch(_){
+    } catch (_) {
       ufsList.clear();
+    } finally {
+      if (place?.state != null) ufSelected.value = place?.state ?? "";
     }
   }
 
   searchAddressInformation() async {
-    try{
-      if(cepTextController.text.length == 9){
+    try {
+      if (cepTextController.text.length == 9) {
         AddressInformation? addressInformation = await _consultCepService.searchCep(cepTextController.text);
-        if(addressInformation != null){
+        if (addressInformation != null) {
           ufSelected.value = addressInformation.uf;
           cityTextController.text = addressInformation.localidade;
           streetTextController.text = addressInformation.logradouro;
           neighborhoodTextController.text = addressInformation.bairro;
           complementTextController.text = addressInformation.complemento;
-        }
-        else{
+        } else {
           throw Exception();
         }
       }
-    }
-    catch(_){
+    } catch (_) {
       ufSelected.value = "";
       cityTextController.text = "";
       streetTextController.text = "";
@@ -142,9 +178,8 @@ class CreateEditAdController extends GetxController {
   addNewPicture() async {
     try {
       final image = await ViewPicture.addNewPicture();
-      if(image != null) placeImages.add(image);
-    }
-    catch(_) {
+      if (image != null) placeImages.add(image);
+    } catch (_) {
       showDialog(
         context: Get.context!,
         barrierDismissible: false,
@@ -173,12 +208,80 @@ class CreateEditAdController extends GetxController {
 
   openCatories() async {
     var result = await Get.to(() => CategoryAdPage(categories: categories));
-    if(result != null && result.runtimeType == RxList && (result as RxList).isNotEmpty){
+    if (result != null && result.runtimeType == RxList && (result as RxList).isNotEmpty) {
       categories = (result as RxList<Category>);
     }
   }
 
   addNewAd() async {
-    Get.back(result: categories);
+    try {
+      loadingWithSuccessOrErrorWidget.startAnimation();
+      final establishment = Establishment(
+        id: place?.id ?? const Uuid().v4(),
+        name: nameController.text,
+        description: descriptionController.text,
+        primaryTelephone: phone1TextEditingController.text,
+        secondaryTelephone: phone2TextEditingController.text,
+        tertiaryTelephone: phone3TextEditingController.text,
+        cep: cepTextController.text,
+        state: ufSelected.value,
+        city: cityTextController.text,
+        address: streetTextController.text,
+        number: houseNumberTextController.text,
+        district: neighborhoodTextController.text,
+        latitude: latitudeController.text,
+        longitude: longitudeController.text,
+        complement: complementTextController.text,
+        primaryTelephoneIsWhatsapp: phoneItsWhatsapp.value,
+        categoryId: null,
+      );
+      final createEstablishment = await _establishmentService.createOrEdit(establishment);
+      if (!createEstablishment) throw Exception();
+      bool createImage = true;
+      if (place != null) {
+        for (String image in (place!.establishmentMediaIds ?? [])) {
+          await _mediaService.deleteMedia(image);
+        }
+      }
+      for (var imageBase64 in placeImages) {
+        final media = Media(base64: imageBase64, name: null, extension: MediaExtension.jpeg, id: const Uuid().v4());
+        bool createImageUnique = await _mediaService.createOrEdit(media);
+        createImageUnique = await _establishmentMediaService.createOrEdit(
+            EstablishmentMedia(establishmentId: establishment.id, mediaId: media.id, main: false, id: const Uuid().v4()));
+        createImage = createImageUnique;
+      }
+      if (!createImage) throw Exception();
+      if (place != null) {
+        establishment.imagesPlace = placeImages;
+      }
+      bool createCategory = true;
+      if (place != null) {
+        for (String category in (place!.categoryIds ?? [])) {
+          await _establishmentCategoryService.deleteEstablishmentCategory(category);
+        }
+      }
+      for (var category in categories.where((p0) => p0.selected)) {
+        createCategory = await _establishmentCategoryService.createOrEdit(
+            EstablishmentCategory(establishmentId: establishment.id, categoryId: category.id, id: const Uuid().v4()));
+      }
+      if (!createCategory) throw Exception();
+      await Get.find<MainMenuController>().getPlaces();
+      if (place != null) {
+        Get.back(result: establishment);
+      } else {
+        Get.back(result: categories);
+      }
+    } catch (_) {
+      await loadingWithSuccessOrErrorWidget.stopAnimation(fail: true);
+      showDialog(
+        context: Get.context!,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const InformationPopup(
+            warningMessage: "Erro ao salvar anúncio!\nTente novamente mais tarde.",
+          );
+        },
+      );
+    }
   }
 }
