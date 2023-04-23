@@ -1,8 +1,12 @@
+import 'package:catalago_japamix/app/modules/mainMenu/controller/main_menu_controller.dart';
 import 'package:catalago_japamix/app/utils/helpers/view_picture.dart';
 import 'package:catalago_japamix/base/models/establishment/establishment.dart';
+import 'package:catalago_japamix/base/services/establishment_service.dart';
+import 'package:catalago_japamix/base/services/interfaces/iestablishment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../base/models/addressInformation/address_information.dart';
 import '../../../../base/services/consult_cep_service.dart';
 import '../../../../base/services/interfaces/iconsult_cep_service.dart';
@@ -21,7 +25,9 @@ class CreateEditAdController extends GetxController {
   late RxBool cityInputHasError;
   late RxBool streetInputHasError;
   late RxBool neighborhoodInputHasError;
+  late RxBool nameHasError;
   late RxBool phoneItsWhatsapp;
+  late FocusNode nameFocusNode;
   late FocusNode descriptionFocusNode;
   late FocusNode phone1FocusNode;
   late FocusNode phone2FocusNode;
@@ -32,6 +38,9 @@ class CreateEditAdController extends GetxController {
   late FocusNode houseNumberFocusNode;
   late FocusNode neighborhoodFocusNode;
   late FocusNode complementFocusNode;
+  late FocusNode latitudeFocusNode;
+  late FocusNode longitudeFocusNode;
+  late TextEditingController nameController;
   late TextEditingController descriptionController;
   late TextEditingController phone1TextEditingController;
   late TextEditingController phone2TextEditingController;
@@ -42,17 +51,20 @@ class CreateEditAdController extends GetxController {
   late TextEditingController houseNumberTextController;
   late TextEditingController neighborhoodTextController;
   late TextEditingController complementTextController;
+  late TextEditingController latitudeController;
+  late TextEditingController longitudeController;
   late RxList<String> ufsList;
   late RxList<XFile> placeImages;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
   late IConsultCepService _consultCepService;
+  late final IEstablishmentService _establishmentService;
 
-  CreateEditAdController(this.place){
+  CreateEditAdController(this.place) {
     _initializeVariables();
     _getUfsNames();
   }
 
-  _initializeVariables(){
+  _initializeVariables() {
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     ufSelected = "".obs;
     phone1HasError = false.obs;
@@ -62,7 +74,9 @@ class CreateEditAdController extends GetxController {
     cityInputHasError = false.obs;
     streetInputHasError = false.obs;
     neighborhoodInputHasError = false.obs;
+    nameHasError = false.obs;
     phoneItsWhatsapp = false.obs;
+    nameFocusNode = FocusNode();
     descriptionFocusNode = FocusNode();
     phone1FocusNode = FocusNode();
     phone2FocusNode = FocusNode();
@@ -73,6 +87,9 @@ class CreateEditAdController extends GetxController {
     houseNumberFocusNode = FocusNode();
     neighborhoodFocusNode = FocusNode();
     complementFocusNode = FocusNode();
+    latitudeFocusNode = FocusNode();
+    longitudeFocusNode = FocusNode();
+    nameController = TextEditingController();
     descriptionController = TextEditingController();
     phone1TextEditingController = TextEditingController();
     phone2TextEditingController = TextEditingController();
@@ -83,41 +100,41 @@ class CreateEditAdController extends GetxController {
     houseNumberTextController = TextEditingController();
     neighborhoodTextController = TextEditingController();
     complementTextController = TextEditingController();
+    latitudeController = TextEditingController();
+    longitudeController = TextEditingController();
     placeImages = <XFile>[].obs;
     ufsList = <String>[].obs;
     _consultCepService = ConsultCepService();
+    _establishmentService = EstablishmentService();
   }
 
   _getUfsNames() async {
-    try{
+    try {
       ufsList.clear();
       List<String> states = await BrazilAddressInformations.getUfsNames();
-      for(var uf in states) {
+      for (var uf in states) {
         ufsList.add(uf);
       }
-    }
-    catch(_){
+    } catch (_) {
       ufsList.clear();
     }
   }
 
   searchAddressInformation() async {
-    try{
-      if(cepTextController.text.length == 9){
+    try {
+      if (cepTextController.text.length == 9) {
         AddressInformation? addressInformation = await _consultCepService.searchCep(cepTextController.text);
-        if(addressInformation != null){
+        if (addressInformation != null) {
           ufSelected.value = addressInformation.uf;
           cityTextController.text = addressInformation.localidade;
           streetTextController.text = addressInformation.logradouro;
           neighborhoodTextController.text = addressInformation.bairro;
           complementTextController.text = addressInformation.complemento;
-        }
-        else{
+        } else {
           throw Exception();
         }
       }
-    }
-    catch(_){
+    } catch (_) {
       ufSelected.value = "";
       cityTextController.text = "";
       streetTextController.text = "";
@@ -129,9 +146,8 @@ class CreateEditAdController extends GetxController {
   addNewPicture() async {
     try {
       final image = await ViewPicture.addNewPicture();
-      if(image != null) placeImages.add(image);
-    }
-    catch(_) {
+      if (image != null) placeImages.add(image);
+    } catch (_) {
       showDialog(
         context: Get.context!,
         barrierDismissible: false,
@@ -156,5 +172,30 @@ class CreateEditAdController extends GetxController {
         );
       },
     );
+  }
+
+  void saveEstablishment() async {
+    final establishment = Establishment(
+      id: const Uuid().v4(),
+      name: nameController.text,
+      description: descriptionController.text,
+      primaryTelephone: phone1TextEditingController.text,
+      secondaryTelephone: phone2TextEditingController.text,
+      tertiaryTelephone: phone3TextEditingController.text,
+      cep: cepTextController.text,
+      state: ufSelected.value,
+      city: cityTextController.text,
+      address: streetTextController.text,
+      number: houseNumberTextController.text,
+      district: neighborhoodTextController.text,
+      latitude: latitudeController.text,
+      longitude: longitudeController.text,
+      categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    );
+    final createEstablishment = await _establishmentService.createOrEdit(establishment);
+    if (createEstablishment) {
+      Get.find<MainMenuController>().getPlaces();
+      Get.back();
+    }
   }
 }

@@ -1,9 +1,13 @@
 import 'package:catalago_japamix/base/models/establishment/establishment.dart';
+import 'package:catalago_japamix/base/services/interfaces/icategory_service.dart';
+import 'package:catalago_japamix/base/services/interfaces/iestablishment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../base/models/category/category.dart';
+import '../../../../base/services/category_service.dart';
+import '../../../../base/services/establishment_service.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
@@ -16,128 +20,45 @@ class MainMenuController extends GetxController {
   late TextEditingController searchByName;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
   late RxList<Establishment> visitPlaces;
-  late List<Category> _categories;
+  late RxList<Category> _categories;
+  late final IEstablishmentService _establishmentService;
+  late final ICategoryService _categoryService;
 
   MainMenuController() {
     _initializeVariables();
+    _initializeMethods();
   }
 
   _initializeVariables() {
     searchByName = TextEditingController();
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
-    _categories = <Category>[
-      Category(
-        id: const Uuid().v4(),
-        description: "Áreas de lazer para eventos e diversão em geral",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Cabeleireiros e barbearias",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Lista de delivery com a maior opção para sua fome",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Açai, Assados, Food Truck, Sucos e Pizzarias",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Café da Manhã",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Salgados para festa, bolos e doces em geral",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Restaurantes e marmitarias",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Farmácias e Drogarias",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Motorista de Aplicativo",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Mototáxi, táxi e motorista de app",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Fretes em Geral",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Profissionais da Construção Civil",
-      ),
-      Category(
-        id: const Uuid().v4(),
-        description: "Manicures, pedicures e podólogas",
-      ),
-    ];
-    visitPlaces = <Establishment>[
-      Establishment(
-        name: "Área de lazer JF eventos Completo",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris velit ligula, auctor vitae congue a, semper efficitur arcu. Donec vulputate aliquam augue, a imperdiet lacus volutpat ac. Nulla at augue quis diam viverra luctus nec eu massa. Vestibulum elementum arcu nulla, fermentum luctus diam malesuada vel. Aenean vel purus laoreet, aliquet urna at, pulvinar ligula. Etiam auctor odio mattis ipsum sagittis imperdiet. Suspendisse potenti. Duis quis tempus diam. In felis orci, vehicula eu dignissim ut, condimentum non tellus.",
-        primaryTelephone: "(17) 99158-6377",
-        secondaryTelephone: "(17) 99234-9875",
-        tertiaryTelephone: "(17) 98234-2835",
-        address: "Jd. das Oliveiras",
-        imagesPlace: [
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-          Paths.backgroundImage,
-        ],
-        categoryId: "",
-        city: "",
-        district: "",
-        id: "",
-        latitude: "",
-        longitude: "",
-        number: "",
-        state: "",
-      ),
-      Establishment(
-        name: "Área de lazer JF eventos",
-        primaryTelephone: "(17) 99158-6377",
-        address: "Jd. das Oliveiras",
-        description: "",
-        secondaryTelephone: "",
-        tertiaryTelephone: "",
-        imagesPlace: [],
-        categoryId: "",
-        city: "",
-        district: "",
-        id: "",
-        latitude: "",
-        longitude: "",
-        number: "",
-        state: "",
-      ),
-      Establishment(
-        name: "Jd. das Oliveiras",
-        primaryTelephone: "(17) 3542-4434",
-        secondaryTelephone: "(17) 99157-0369",
-        description: "",
-        address: "",
-        tertiaryTelephone: "",
-        imagesPlace: [],
-        categoryId: "",
-        city: "",
-        district: "",
-        id: "",
-        latitude: "",
-        longitude: "",
-        number: "",
-        state: "",
-      ),
-    ].obs;
+    _establishmentService = EstablishmentService();
+    _categoryService = CategoryService();
+    _categories = <Category>[].obs;
+    visitPlaces = <Establishment>[].obs;
+  }
+
+  _initializeMethods() {
+    getPlaces();
+    getCategories();
+  }
+
+  void getPlaces() async {
+    try {
+      visitPlaces.value = [];
+      visitPlaces.value = await _establishmentService.getAll();
+    } catch (_) {
+      visitPlaces.value = [];
+    }
+  }
+
+  void getCategories() async {
+    try {
+      _categories.value = [];
+      _categories.value = await _categoryService.getAll();
+    } catch (_) {
+      _categories.value = [];
+    }
   }
 
   openFilter() async {

@@ -14,6 +14,7 @@ class Establishment extends JapaMixBase {
   final String? number;
   final String? district;
   final String? city;
+  final String? cep;
   final String? state;
   final String? latitude;
   final String? longitude;
@@ -35,6 +36,7 @@ class Establishment extends JapaMixBase {
     required this.latitude,
     required this.longitude,
     required this.categoryId,
+    required this.cep,
     required super.id,
     this.imagesPlace = const [],
   }) : super(inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false);

@@ -21,6 +21,7 @@ Establishment _$EstablishmentFromJson(Map<String, dynamic> json) =>
       latitude: json['latitude'] as String?,
       longitude: json['longitude'] as String?,
       categoryId: json['categoryId'] as String,
+      cep: json['cep'] as String?,
       id: json['id'] as String,
     );
 
@@ -36,6 +37,7 @@ Map<String, dynamic> _$EstablishmentToJson(Establishment instance) =>
       'number': instance.number,
       'district': instance.district,
       'city': instance.city,
+      'cep': instance.cep,
       'state': instance.state,
       'latitude': instance.latitude,
       'longitude': instance.longitude,

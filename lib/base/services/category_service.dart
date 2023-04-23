@@ -1,7 +1,9 @@
 import 'package:catalago_japamix/base/services/base/base_service.dart';
+import 'package:catalago_japamix/base/services/interfaces/icategory_service.dart';
 import '../models/category/category.dart';
 
-class CategoryService extends BaseService {
+class CategoryService extends BaseService implements ICategoryService {
+  @override
   Future<List<Category>> getAll() async {
     try {
       final response = await get('$baseUrlApi/Category/GetAll');
@@ -12,6 +14,7 @@ class CategoryService extends BaseService {
     }
   }
 
+  @override
   Future<Category?> getById(String id) async {
     try {
       final response = await get('$baseUrlApi/Category/GetById', query: {"Id": id});
@@ -22,6 +25,7 @@ class CategoryService extends BaseService {
     }
   }
 
+  @override
   Future<bool> createOrEdit(Category category) async {
     try {
       final response = await post('$baseUrlApi/Category/CreateOrEdit', category.toJson());
@@ -32,6 +36,7 @@ class CategoryService extends BaseService {
     }
   }
 
+  @override
   Future<bool> deleteCategory(String id) async {
     try {
       final response = await delete('$baseUrlApi/Category/Delete', query: {"Id": id});
