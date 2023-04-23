@@ -21,7 +21,7 @@ Map<String, dynamic> _$MediaToJson(Media instance) => <String, dynamic>{
     };
 
 const _$MediaExtensionEnumMap = {
-  MediaExtension.png: 'png',
-  MediaExtension.jpeg: 'jpeg',
-  MediaExtension.jpg: 'jpg',
+  MediaExtension.png: 0,
+  MediaExtension.jpeg: 1,
+  MediaExtension.jpg: 2,
 };

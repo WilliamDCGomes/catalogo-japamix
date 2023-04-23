@@ -3,19 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/picture_ad_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
+import '../../createEditAd/page/create_edit_ad_page.dart';
 
 class DetailAdPage extends StatefulWidget {
   final Establishment establishment;
+  final List<Category> categories;
 
   const DetailAdPage({
     Key? key,
     required this.establishment,
+    required this.categories,
   }) : super(key: key);
 
   @override
@@ -95,6 +100,27 @@ class _DetailAdPageState extends State<DetailAdPage> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: InkWell(
+                            onTap: () async {
+                              final establishment = await Get.to(() => CreateEditAdPage(
+                                    place: controller.visitPlace,
+                                    categories: widget.categories,
+                                  ));
+                              if (establishment != null) {
+                                setState(() {
+                                  controller.visitPlace = establishment;
+                                });
+                              }
+                            },
+                            child: Icon(
+                              Icons.edit,
+                              color: AppColors.blackColor,
+                              size: 3.h,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     elevation: 5,
@@ -150,41 +176,49 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     ),
                                   ],
                                 ),
-                              if (controller.visitPlace.imagesPlace.isNotEmpty)
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextWidget(
-                                      "Fotos",
-                                      textColor: AppColors.blackColor,
-                                      fontSize: 18.sp,
-                                      textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(bottom: 2.h),
-                                      child: SizedBox(
-                                        height: 20.h,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.horizontal,
-                                          shrinkWrap: true,
-                                          itemCount: controller.visitPlace.imagesPlace.length,
-                                          itemBuilder: (context, index) {
-                                            return LazyLoadingList(
-                                              initialSizeOfItems: 2,
-                                              index: index,
-                                              loadMore: (){},
-                                              hasMore: true,
-                                              child: PictureAdWidget(
-                                                path: controller.visitPlace.imagesPlace[index],
+                              GetBuilder<DetailAdController>(
+                                  init: controller,
+                                  id: 'imagem',
+                                  builder: (controller) {
+                                    if (controller.visitPlace.imagesPlace.isNotEmpty) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          TextWidget(
+                                            "Fotos",
+                                            textColor: AppColors.blackColor,
+                                            fontSize: 18.sp,
+                                            textAlign: TextAlign.center,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(top: 1.h, bottom: 2.h),
+                                            child: SizedBox(
+                                              height: 20.h,
+                                              child: ListView.builder(
+                                                scrollDirection: Axis.horizontal,
+                                                shrinkWrap: true,
+                                                itemCount: controller.visitPlace.imagesPlace.length,
+                                                itemBuilder: (context, index) {
+                                                  return LazyLoadingList(
+                                                    initialSizeOfItems: 2,
+                                                    index: index,
+                                                    loadMore: () {},
+                                                    hasMore: true,
+                                                    child: PictureAdWidget(
+                                                      fromAsset: false,
+                                                      path: controller.visitPlace.imagesPlace[index],
+                                                    ),
+                                                  );
+                                                },
                                               ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    return const SizedBox();
+                                  }),
                               if (controller.visitPlace.address != null && controller.visitPlace.address != "")
                                 Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -200,7 +234,24 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     Padding(
                                       padding: EdgeInsets.only(top: 1.h, bottom: 2.h),
                                       child: TextButton(
-                                        onPressed: () {},
+                                        onPressed: () async {
+                                          if (controller.visitPlace.latitude != null &&
+                                              controller.visitPlace.longitude != null) {
+                                            final completeAddress =
+                                                "https://www.google.com/maps/search/?api=1&query=${controller.visitPlace.latitude ?? ''},${controller.visitPlace.longitude ?? ''}";
+                                            await launchUrl(Uri.parse(completeAddress),
+                                                mode: LaunchMode.externalNonBrowserApplication);
+                                            return;
+                                          }
+                                          final address = controller.visitPlace.address?.replaceAll(" ", "+");
+                                          final state = controller.visitPlace.state?.replaceAll(" ", "+");
+                                          final city = controller.visitPlace.city?.replaceAll(" ", "+");
+                                          final number = controller.visitPlace.number?.replaceAll(" ", "+");
+                                          final completeAddress =
+                                              "https://www.google.com/maps/search/?api=1&query=${address ?? ''}+${number ?? ''}+${city ?? ''}+${state ?? ''}";
+                                          await launchUrl(Uri.parse(completeAddress),
+                                              mode: LaunchMode.externalNonBrowserApplication);
+                                        },
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
@@ -212,13 +263,16 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                             SizedBox(
                                               width: 4.w,
                                             ),
-                                            TextWidget(
-                                              controller.visitPlace.address ?? "",
-                                              textColor: AppColors.blackColor,
-                                              fontSize: 16.sp,
-                                              textAlign: TextAlign.center,
-                                              fontWeight: FontWeight.bold,
-                                              textDecoration: TextDecoration.underline,
+                                            Expanded(
+                                              child: TextWidget(
+                                                controller.visitPlace.completeAddress,
+                                                textColor: AppColors.blackColor,
+                                                fontSize: 16.sp,
+                                                textAlign: TextAlign.start,
+                                                fontWeight: FontWeight.bold,
+                                                maxLines: 5,
+                                                textDecoration: TextDecoration.underline,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -237,7 +291,17 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      if (controller.visitPlace.primaryTelephoneIsWhatsapp) {
+                                        launchUrl(
+                                            Uri.parse(
+                                                "https://api.whatsapp.com/send?phone=55${controller.visitPlace.primaryTelephone}"),
+                                            mode: LaunchMode.externalNonBrowserApplication);
+                                      } else {
+                                        launchUrl(Uri.parse("tel:${controller.visitPlace.primaryTelephone}"),
+                                            mode: LaunchMode.externalNonBrowserApplication);
+                                      }
+                                    },
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -263,7 +327,10 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                   if (controller.visitPlace.secondaryTelephone != null &&
                                       controller.visitPlace.secondaryTelephone != "")
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        launchUrl(Uri.parse("tel:${controller.visitPlace.secondaryTelephone}"),
+                                            mode: LaunchMode.externalNonBrowserApplication);
+                                      },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -289,7 +356,10 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                   if (controller.visitPlace.tertiaryTelephone != null &&
                                       controller.visitPlace.tertiaryTelephone != "")
                                     TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        launchUrl(Uri.parse("tel:${controller.visitPlace.tertiaryTelephone}"),
+                                            mode: LaunchMode.externalNonBrowserApplication);
+                                      },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../utils/helpers/paths.dart';
+import '../../../utils/sharedWidgets/category_list_widget.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
-import '../../createEditAd/page/create_edit_ad_page.dart';
 import '../controller/main_menu_controller.dart';
-import '../widget/place_card_widget.dart';
 
 class MainMenuPage extends StatefulWidget {
   const MainMenuPage({Key? key}) : super(key: key);
@@ -123,14 +122,9 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                   textColor: AppColors.blackColor,
                                 ),
                               ),
-                              child: ListView.builder(
-                                itemCount: controller.visitPlaces.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return PlaceCardWidget(
-                                    place: controller.visitPlaces[index],
-                                  );
-                                },
+                              child: CategoryListWidget(
+                                itens: controller.visitPlaces,
+                                categories: controller.categories,
                               ),
                             ),
                           ),
@@ -139,7 +133,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                     ),
                   ),
                   floatingActionButton: FloatingActionButton(
-                    onPressed: () => Get.to(() => const CreateEditAdPage()),
+                    onPressed: () => controller.addAd(),
                     backgroundColor: AppColors.redColor,
                     elevation: 3,
                     child: Icon(

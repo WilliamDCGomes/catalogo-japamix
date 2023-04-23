@@ -29,7 +29,7 @@ class CategoryService extends BaseService implements ICategoryService {
   Future<bool> createOrEdit(Category category) async {
     try {
       final response = await post('$baseUrlApi/Category/CreateOrEdit', category.toJson());
-      if (hasErrorResponse(response)) throw Exception();
+      if (response.statusCode != 200) throw Exception();
       return true;
     } catch (_) {
       return false;

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ import '../sharedWidgets/popups/information_popup.dart';
 
 class ViewPicture {
   static openPicture(String path) {
-    try{
+    try {
       showImageViewer(
         Get.context!,
         Image.memory(
@@ -20,8 +21,7 @@ class ViewPicture {
           ).readAsBytesSync(),
         ).image,
       );
-    }
-    catch(_){
+    } catch (_) {
       showDialog(
         context: Get.context!,
         barrierDismissible: false,
@@ -34,7 +34,7 @@ class ViewPicture {
     }
   }
 
-  static Future<XFile?> addNewPicture() async {
+  static Future<String?> addNewPicture() async {
     XFile? picture;
     await showDialog(
       context: Get.context!,
@@ -56,7 +56,7 @@ class ViewPicture {
         );
       },
     );
-    return picture;
+    return base64Encode(await picture!.readAsBytes());
   }
 
   static Future<XFile?> _getImage(ImageOrigin origin) async {

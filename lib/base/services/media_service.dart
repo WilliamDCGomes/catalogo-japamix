@@ -1,7 +1,9 @@
 import 'package:catalago_japamix/base/services/base/base_service.dart';
-import '../models/media/media.dart';
+import 'package:catalago_japamix/base/services/interfaces/imedia_service.dart';
+import '../../../../base/models/media/media.dart';
 
-class MediaService extends BaseService {
+class MediaService extends BaseService implements IMediaService {
+  @override
   Future<List<Media>> getAll() async {
     try {
       final response = await get('$baseUrlApi/Media/GetAll');
@@ -12,6 +14,7 @@ class MediaService extends BaseService {
     }
   }
 
+  @override
   Future<Media?> getById(String id) async {
     try {
       final response = await get('$baseUrlApi/Media/GetById', query: {"Id": id});
@@ -22,6 +25,7 @@ class MediaService extends BaseService {
     }
   }
 
+  @override
   Future<bool> createOrEdit(Media media) async {
     try {
       final response = await post('$baseUrlApi/Media/CreateOrEdit', media.toJson());
@@ -32,6 +36,7 @@ class MediaService extends BaseService {
     }
   }
 
+  @override
   Future<bool> deleteMedia(String id) async {
     try {
       final response = await delete('$baseUrlApi/Media/Delete', query: {"Id": id});

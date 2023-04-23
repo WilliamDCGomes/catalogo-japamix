@@ -1,5 +1,6 @@
 import 'package:catalago_japamix/base/models/base/japamix_base.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 
 part 'category.g.dart';
 
@@ -12,8 +13,22 @@ class Category extends JapaMixBase {
   Category({
     required this.description,
     required super.id,
+    required super.inclusion,
+    DateTime? alteration,
+    super.deleted = false,
     this.selected = false,
-  }) : super(inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false);
+  }) : super(alteration: alteration ?? DateTime.now());
+
+  Category copyWith(Category category) {
+    return Category(
+      description: category.description,
+      id: category.id,
+      inclusion: category.inclusion,
+      deleted: category.deleted,
+      selected: category.selected,
+      alteration: category.alteration,
+    );
+  }
 
   factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 

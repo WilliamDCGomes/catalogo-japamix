@@ -4,22 +4,23 @@ import 'package:catalago_japamix/base/services/interfaces/iestablishment_service
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/services/category_service.dart';
 import '../../../../base/services/establishment_service.dart';
-import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
+import '../../../utils/sharedWidgets/category_ad_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 import '../../../utils/sharedWidgets/popups/default_popup_widget.dart';
 import '../../../utils/sharedWidgets/text_button_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
+import '../../createEditAd/page/create_edit_ad_page.dart';
 
 class MainMenuController extends GetxController {
+  late bool allCategoriesSelected;
   late TextEditingController searchByName;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
-  late RxList<Establishment> visitPlaces;
+  late RxList<Establishment> _visitPlaces;
   late RxList<Category> _categories;
   late final IEstablishmentService _establishmentService;
   late final ICategoryService _categoryService;
@@ -30,39 +31,51 @@ class MainMenuController extends GetxController {
   }
 
   _initializeVariables() {
+    allCategoriesSelected = true;
     searchByName = TextEditingController();
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     _establishmentService = EstablishmentService();
     _categoryService = CategoryService();
     _categories = <Category>[].obs;
-    visitPlaces = <Establishment>[].obs;
+    _visitPlaces = <Establishment>[].obs;
   }
 
-  _initializeMethods() {
-    getPlaces();
-    getCategories();
+  _initializeMethods() async {
+    await getCategories();
+    await getPlaces();
   }
 
-  void getPlaces() async {
+  //Getters
+  List<Category> get categories => _categories;
+  List<Establishment> get visitPlaces {
+    return _visitPlaces
+        .where((p0) => _categories.where((p0) => p0.selected).map((e) => e.id).toList().contains(p0.categoryId))
+        .toList();
+  }
+
+  Future<void> getPlaces() async {
     try {
-      visitPlaces.value = [];
-      visitPlaces.value = await _establishmentService.getAll();
+      _visitPlaces.value = [];
+      _visitPlaces.value = await _establishmentService.getAll();
     } catch (_) {
-      visitPlaces.value = [];
+      _visitPlaces.value = [];
     }
   }
 
-  void getCategories() async {
+  Future<void> getCategories() async {
     try {
       _categories.value = [];
       _categories.value = await _categoryService.getAll();
     } catch (_) {
       _categories.value = [];
+    } finally {
+      for (var category in _categories) {
+        category.selected = true;
+      }
     }
   }
 
   openFilter() async {
-    bool allCategoriesSelected = true;
     await showDialog(
       context: Get.context!,
       builder: (context) => StatefulBuilder(
@@ -95,24 +108,19 @@ class MainMenuController extends GetxController {
               child: ListView.builder(
                 itemCount: _categories.length,
                 padding: EdgeInsets.zero,
-                itemBuilder: (context, index) => TextButtonWidget(
-                  widgetCustom: Align(
-                    alignment: Alignment.centerLeft,
-                    child: CheckboxListTileWidget(
-                      radioText: _categories[index].description,
-                      size: 4.h,
-                      checked: _categories[index].selected,
-                      justRead: true,
-                      onChanged: () {},
-                    ),
-                  ),
+                itemBuilder: (context, index) => CategoryAdWidget(
+                  category: _categories[index],
+                  disableStyle: true,
                   onTap: () async {
                     setState(() {
                       _categories[index].selected = !_categories[index].selected;
                       if (allCategoriesSelected && !_categories[index].selected) {
                         allCategoriesSelected = _categories[index].selected;
-                      } else if (!allCategoriesSelected && _categories[index].selected && _categories.length == 1) {
-                        allCategoriesSelected = true;
+                      } else {
+                        allCategoriesSelected =
+                            (!allCategoriesSelected && _categories[index].selected && _categories.length == 1) ||
+                                (!allCategoriesSelected &&
+                                    _categories.where((category) => category.selected).length == _categories.length);
                       }
                     });
                   },
@@ -137,11 +145,11 @@ class MainMenuController extends GetxController {
                     _categories.sort((a, b) => b.selected.toString().compareTo(a.selected.toString()));
                   });
 
-                  if (_categories.where((element) => element.selected).length == _categories.length) {
-                    //updateList();
-                  } else {
-                    //_filterListPerCities();
-                  }
+                  // if (_categories.where((element) => element.selected).length == _categories.length) {
+
+                  // } else {
+
+                  // }
                 },
               ),
             ),
@@ -149,5 +157,13 @@ class MainMenuController extends GetxController {
         ),
       ),
     );
+  }
+
+  addAd() async {
+    var result = Get.to(() => CreateEditAdPage(categories: _categories));
+
+    if (result != null && result.runtimeType == RxList && (result as RxList).isNotEmpty) {
+      _categories.value = (result as List<Category>);
+    }
   }
 }
