@@ -104,7 +104,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                           backgroundColor: AppColors.defaultColor,
                           informationText: "",
                           customContainer: TextWidget(
-                            "Lista de utilidade pública interativa",
+                            "Lista de utilidade pública",
                             textColor: AppColors.blackColor,
                             fontSize: 18.sp,
                             textAlign: TextAlign.center,
