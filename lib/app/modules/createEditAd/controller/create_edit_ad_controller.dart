@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:catalago_japamix/app/modules/mainMenu/controller/main_menu_controller.dart';
 import 'package:catalago_japamix/app/modules/categoryAd/page/category_ad_page.dart';
+import 'package:catalago_japamix/app/modules/mainMenu/page/main_menu_page.dart';
 import 'package:catalago_japamix/app/utils/helpers/view_picture.dart';
 import 'package:catalago_japamix/base/models/category/category.dart';
 import 'package:catalago_japamix/base/models/establishment/establishment.dart';
@@ -13,7 +12,6 @@ import 'package:catalago_japamix/base/services/interfaces/iestablishment_service
 import 'package:catalago_japamix/base/services/interfaces/imedia_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../base/models/addressInformation/address_information.dart';
 import '../../../../base/models/establishmentCategory/establishment_category.dart';
@@ -29,6 +27,7 @@ import '../../../utils/sharedWidgets/popups/confirmation_popup.dart';
 import '../../../utils/sharedWidgets/popups/information_popup.dart';
 
 class CreateEditAdController extends GetxController {
+  late bool newPlace;
   late Establishment? place;
   late RxString ufSelected;
   late RxBool phone1HasError;
@@ -82,6 +81,7 @@ class CreateEditAdController extends GetxController {
   }
 
   _initializeVariables(List<Category> categoriesList) {
+    newPlace = place == null;
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     ufSelected = "".obs;
     phone1HasError = false.obs;
@@ -125,6 +125,7 @@ class CreateEditAdController extends GetxController {
     ufsList = <String>[].obs;
     categories = <Category>[].obs;
     for (var category in categoriesList) {
+      category.selected = false;
       final categoryToAdd = category.copyWith(category);
       if (place != null && place!.categoryIds != null && place!.categoryIds!.contains(categoryToAdd.id)) {
         categoryToAdd.selected = true;
@@ -208,13 +209,42 @@ class CreateEditAdController extends GetxController {
 
   openCatories() async {
     var result = await Get.to(() => CategoryAdPage(categories: categories));
-    if (result != null && result.runtimeType == RxList && (result as RxList).isNotEmpty) {
+    if (result != null && (result.runtimeType == RxList<Category>) && (result as RxList).isNotEmpty) {
       categories = (result as RxList<Category>);
+    }
+  }
+
+  bool verifyFields(){
+    try{
+      if(nameController.text.isEmpty){
+        throw Exception("Informe o nome do anúncio!");
+      }
+      else if(phone1TextEditingController.text.isEmpty && phone2TextEditingController.text.isEmpty && phone3TextEditingController.text.isEmpty){
+        throw Exception("Informe ao menos um telefone de contato!");
+      }
+      else if (!categories.any((category) => category.selected)) {
+        throw Exception("Selecione ao menos uma categoria para o anúncio!");
+      }
+
+      return true;
+    }
+    catch(e){
+      showDialog(
+        context: Get.context!,
+        builder: (BuildContext context) {
+          return InformationPopup(
+            warningMessage: e.toString().replaceAll("Exception: ", ""),
+          );
+        },
+      );
+      return false;
     }
   }
 
   addNewAd() async {
     try {
+      if(!verifyFields()) return;
+
       loadingWithSuccessOrErrorWidget.startAnimation();
       final establishment = Establishment(
         id: place?.id ?? const Uuid().v4(),
@@ -244,10 +274,21 @@ class CreateEditAdController extends GetxController {
         }
       }
       for (var imageBase64 in placeImages) {
-        final media = Media(base64: imageBase64, name: null, extension: MediaExtension.jpeg, id: const Uuid().v4());
+        final media = Media(
+          base64: imageBase64,
+          name: null,
+          extension: MediaExtension.jpeg,
+          id: const Uuid().v4(),
+        );
         bool createImageUnique = await _mediaService.createOrEdit(media);
         createImageUnique = await _establishmentMediaService.createOrEdit(
-            EstablishmentMedia(establishmentId: establishment.id, mediaId: media.id, main: false, id: const Uuid().v4()));
+          EstablishmentMedia(
+            establishmentId: establishment.id,
+            mediaId: media.id,
+            main: false,
+            id: const Uuid().v4(),
+          ),
+        );
         createImage = createImageUnique;
       }
       if (!createImage) throw Exception();
@@ -260,17 +301,42 @@ class CreateEditAdController extends GetxController {
           await _establishmentCategoryService.deleteEstablishmentCategory(category);
         }
       }
-      for (var category in categories.where((p0) => p0.selected)) {
-        createCategory = await _establishmentCategoryService.createOrEdit(
-            EstablishmentCategory(establishmentId: establishment.id, categoryId: category.id, id: const Uuid().v4()));
+      for (var category in categories) {
+        if(category.selected){
+          createCategory = await _establishmentCategoryService.createOrEdit(
+            EstablishmentCategory(
+              establishmentId: establishment.id,
+              categoryId: category.id,
+              id: const Uuid().v4(),
+            ),
+          );
+        }
+        else{
+          createCategory = await _establishmentCategoryService.removeCategory(
+            category.id,
+            establishment.id,
+          );
+        }
       }
       if (!createCategory) throw Exception();
       await Get.find<MainMenuController>().getPlaces();
-      if (place != null) {
+
+      await loadingWithSuccessOrErrorWidget.stopAnimation();
+     await showDialog(
+        context: Get.context!,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return InformationPopup(
+            warningMessage: "Anúncio ${newPlace ? "salvo" : "atualizado"} com sucesso!",
+          );
+        },
+      );
+      /*if (place != null) {
         Get.back(result: establishment);
       } else {
         Get.back(result: categories);
-      }
+      }*/
+      Get.offAll(() => const MainMenuPage());
     } catch (_) {
       await loadingWithSuccessOrErrorWidget.stopAnimation(fail: true);
       showDialog(

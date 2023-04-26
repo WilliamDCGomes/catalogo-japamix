@@ -37,6 +37,17 @@ class EstablishmentCategoryService extends BaseService implements IEstablishment
   }
 
   @override
+  Future<bool> removeCategory(String categoryId, String establishmentId) async {
+    try {
+      final response = await delete('$baseUrlApi/EstablishmentCategory/RemoveCategory', query: {"CategoryId": categoryId, "EstablishmentId": establishmentId});
+      if (hasErrorResponse(response)) throw Exception();
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
   Future<bool> deleteEstablishmentCategory(String id) async {
     try {
       final response = await delete('$baseUrlApi/EstablishmentCategory/Delete', query: {"Id": id});

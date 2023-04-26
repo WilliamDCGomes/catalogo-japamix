@@ -41,8 +41,11 @@ class MainMenuController extends GetxController {
   }
 
   _initializeMethods() async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    await loadingWithSuccessOrErrorWidget.startAnimation();
     await getCategories();
     await getPlaces();
+    await loadingWithSuccessOrErrorWidget.stopAnimation(justLoading: true);
   }
 
   //Getters
@@ -160,10 +163,10 @@ class MainMenuController extends GetxController {
   }
 
   addAd() async {
-    var result = Get.to(() => CreateEditAdPage(categories: _categories));
+    var result = await Get.to(() => CreateEditAdPage(categories: _categories));
 
     if (result != null && result.runtimeType == RxList && (result as RxList).isNotEmpty) {
-      _categories.value = (result as List<Category>);
+      await _initializeMethods();
     }
   }
 }

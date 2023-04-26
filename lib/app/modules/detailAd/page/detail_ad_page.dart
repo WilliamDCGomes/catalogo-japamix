@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/helpers/paths.dart';
+import '../../../utils/helpers/view_picture.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/picture_ad_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
@@ -200,14 +201,17 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                                 shrinkWrap: true,
                                                 itemCount: controller.visitPlace.imagesPlace.length,
                                                 itemBuilder: (context, index) {
-                                                  return LazyLoadingList(
-                                                    initialSizeOfItems: 2,
-                                                    index: index,
-                                                    loadMore: () {},
-                                                    hasMore: true,
-                                                    child: PictureAdWidget(
-                                                      fromAsset: false,
-                                                      path: controller.visitPlace.imagesPlace[index],
+                                                  return InkWell(
+                                                    onTap: () => ViewPicture.openPicture(controller.visitPlace.imagesPlace[index]),
+                                                    child: LazyLoadingList(
+                                                      initialSizeOfItems: 2,
+                                                      index: index,
+                                                      loadMore: () {},
+                                                      hasMore: true,
+                                                      child: PictureAdWidget(
+                                                        fromAsset: false,
+                                                        path: controller.visitPlace.imagesPlace[index],
+                                                      ),
                                                     ),
                                                   );
                                                 },
