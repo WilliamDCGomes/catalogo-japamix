@@ -75,6 +75,7 @@ class MainMenuController extends GetxController {
       for (var category in _categories) {
         category.selected = true;
       }
+      _categories.sort((a, b) => a.description.compareTo(b.description));
     }
   }
 
