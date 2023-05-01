@@ -179,7 +179,7 @@ class CreateEditAdController extends GetxController {
   addNewPicture() async {
     try {
       final image = await ViewPicture.addNewPicture();
-      if (image != null) placeImages.add(image);
+      if (image != null && image.isNotEmpty) placeImages.addAll(image);
     } catch (_) {
       showDialog(
         context: Get.context!,

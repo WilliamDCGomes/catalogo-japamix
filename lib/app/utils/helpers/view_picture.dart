@@ -29,8 +29,8 @@ class ViewPicture {
     }
   }
 
-  static Future<String?> addNewPicture() async {
-    XFile? picture;
+  static Future<List<String>?> addNewPicture() async {
+    List<XFile>? picture;
     await showDialog(
       context: Get.context!,
       builder: (BuildContext context) {
@@ -51,17 +51,41 @@ class ViewPicture {
         );
       },
     );
-    return base64Encode(await picture!.readAsBytes());
+    if(picture != null && picture!.isNotEmpty) {
+      List<String> pictures = <String>[];
+      for(var file in picture!){
+        var base64 = base64Encode(await file.readAsBytes());
+        if(base64.isNotEmpty) pictures.add(base64);
+      }
+
+      return pictures;
+    }
+    return null;
   }
 
-  static Future<XFile?> _getImage(ImageOrigin origin) async {
+  static Future<List<XFile>?> _getImage(ImageOrigin origin) async {
     try {
       late final ImagePicker picker = ImagePicker();
-      final source = origin == ImageOrigin.camera ? ImageSource.camera : ImageSource.gallery;
+      List<XFile> pictures = <XFile>[];
+      List<XFile> compressPictures = <XFile>[];
 
-      XFile? profilePicture = await picker.pickImage(source: source);
+      if(origin == ImageOrigin.camera){
+        var image = await picker.pickImage(source: ImageSource.camera);
+        if(image != null) {
+          pictures.add(image);
+        }
+      }
+      else {
+        pictures.addAll(await picker.pickMultiImage());
+      }
 
-      return await _compressFile(profilePicture);
+      for(var picture in pictures){
+        var file = await _compressFile(picture);
+        if(file != null) {
+          compressPictures.add(file);
+        }
+      }
+      return compressPictures;
     } catch (e) {
       return null;
     }
