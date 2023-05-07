@@ -6,14 +6,17 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
+import 'image_place_card_widget.dart';
 
 class PlaceCardWidget extends StatelessWidget {
   final Establishment place;
+  final String firstImagePlace;
   final List<Category> categories;
 
   const PlaceCardWidget({
     Key? key,
     required this.place,
+    required this.firstImagePlace,
     required this.categories,
   }) : super(key: key);
 
@@ -41,6 +44,13 @@ class PlaceCardWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if(firstImagePlace.isNotEmpty)
+              Padding(
+                padding: EdgeInsets.only(bottom: 2.h),
+                child: ImagePlaceCardWidget(
+                  firstImagePlace: firstImagePlace,
+                ),
+              ),
             Center(
               child: TextWidget(
                 place.name,

@@ -93,7 +93,7 @@ class _LoadingWithSuccessOrErrorWidgetState extends State<LoadingWithSuccessOrEr
         return !widget.loadingAnimation.value;
       },
       child: Obx(
-        () => Visibility(
+            () => Visibility(
           visible: widget.loadingAnimation.value,
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
@@ -103,17 +103,17 @@ class _LoadingWithSuccessOrErrorWidgetState extends State<LoadingWithSuccessOrEr
               color: AppColors.blackTransparentColor,
               child: Center(
                 child: Obx(
-                  () => Visibility(
+                      () => Visibility(
                     visible: widget.isLoading.value,
                     replacement: widget.success.value
                         ? LottieAssetWidget(
-                            animationPath: Paths.successAnimation,
-                            repeat: false,
-                          )
+                      animationPath: Paths.successAnimation,
+                      repeat: false,
+                    )
                         : LottieAssetWidget(
-                            animationPath: Paths.error,
-                            repeat: false,
-                          ),
+                      animationPath: Paths.error,
+                      repeat: false,
+                    ),
                     child: Padding(
                       padding: EdgeInsets.only(bottom: 5.h),
                       child: LottieAssetWidget(

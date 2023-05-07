@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../base/models/establishment/establishment.dart';
-import '../../modules/mainMenu/widget/place_card_widget.dart';
+import '../../modules/mainMenu/widgets/place_card_widget.dart';
 
 class CategoryListWidget extends StatelessWidget {
   final List<dynamic> itens;
@@ -15,6 +15,18 @@ class CategoryListWidget extends StatelessWidget {
     required this.itens,
     required this.categories,
   }) : super(key: key);
+
+  String _getImage(dynamic establishment) {
+    var establishmentId = establishment['id'];
+
+    if(establishmentId != null && itens.runtimeType == List<Establishment>){
+      var itemOfImage = itens.firstWhere((item) => establishmentId == item.id);
+      if(itemOfImage != null && itemOfImage.imagesPlace.isNotEmpty) {
+        return itemOfImage.imagesPlace.first;
+      }
+    }
+    return "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +48,7 @@ class CategoryListWidget extends StatelessWidget {
       itemBuilder: (context, dynamic establishment) {
         return PlaceCardWidget(
           place: Establishment.fromJson(establishment),
+          firstImagePlace: _getImage(establishment),
           categories: categories as List<Category>,
         );
       },

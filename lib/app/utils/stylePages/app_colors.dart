@@ -16,5 +16,6 @@ class AppColors {
   static const Color grayStepColor = Color(0XFFC9C9C9);
   static const Color backgroundColor = Color(0XFFE7E3E3);
   static const Color grayBackgroundPictureColor = Color(0XFFB2B1B2);
+  static final Color grayStepColorWithOpacity = const Color(0XFFC9C9C9).withOpacity(.6);
   static const List<Color> backgroundFirstScreenColor = [Color(0XFFE7E3E3), Color(0XFFFFFFFF)];
 }

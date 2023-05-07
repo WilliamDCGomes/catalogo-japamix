@@ -51,32 +51,32 @@ class _LoginPageState extends State<LoginPage> {
                 colors: AppColors.backgroundFirstScreenColor,
               ),
             ),
-            child: Stack(
-              children: [
-                Container(
-                  height: 30.h,
-                  width: 100.w,
-                  margin: const EdgeInsets.only(top: 6),
-                  decoration: BoxDecoration(
-                    color: AppColors.redColor,
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15.h)),
+            child: GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+              child: Stack(
+                children: [
+                  Container(
+                    height: 30.h,
+                    width: 100.w,
+                    margin: const EdgeInsets.only(top: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.redColor,
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15.h)),
+                    ),
                   ),
-                ),
-                Container(
-                  height: 30.h,
-                  width: 100.w,
-                  decoration: BoxDecoration(
-                    color: AppColors.defaultColor,
-                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15.h)),
+                  Container(
+                    height: 30.h,
+                    width: 100.w,
+                    decoration: BoxDecoration(
+                      color: AppColors.defaultColor,
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15.h)),
+                    ),
                   ),
-                ),
-                Scaffold(
-                  backgroundColor: AppColors.transparentColor,
-                  body: GestureDetector(
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    },
-                    child: Padding(
+                  Scaffold(
+                    backgroundColor: AppColors.transparentColor,
+                    body: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Column(
                         children: [
@@ -226,9 +226,9 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                ),
-                controller.loadingWithSuccessOrErrorWidget,
-              ],
+                  controller.loadingWithSuccessOrErrorWidget,
+                ],
+              ),
             ),
           ),
         ),

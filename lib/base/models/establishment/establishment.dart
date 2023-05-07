@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:catalago_japamix/base/models/base/japamix_base.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -27,6 +28,8 @@ class Establishment extends JapaMixBase {
   final List<String>? categoryIds;
   @JsonKey(includeToJson: false, includeFromJson: false)
   late List<String> imagesPlace;
+  @JsonKey(includeFromJson: false)
+  late CarouselController carouselController;
 
   String get completeAddress => '$address, $number, $district, $city, $state, $cep';
 

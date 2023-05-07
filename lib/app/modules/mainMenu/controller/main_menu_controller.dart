@@ -7,6 +7,8 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/services/category_service.dart';
 import '../../../../base/services/establishment_service.dart';
+import '../../../../base/services/interfaces/imedia_service.dart';
+import '../../../../base/services/media_service.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
 import '../../../utils/sharedWidgets/category_ad_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
@@ -24,6 +26,7 @@ class MainMenuController extends GetxController {
   late RxList<Category> _categories;
   late final IEstablishmentService _establishmentService;
   late final ICategoryService _categoryService;
+  late final IMediaService _mediaService;
 
   MainMenuController() {
     _initializeVariables();
@@ -36,6 +39,7 @@ class MainMenuController extends GetxController {
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
     _establishmentService = EstablishmentService();
     _categoryService = CategoryService();
+    _mediaService = MediaService();
     _categories = <Category>[].obs;
     _visitPlaces = <Establishment>[].obs;
   }
@@ -51,18 +55,34 @@ class MainMenuController extends GetxController {
   //Getters
   List<Category> get categories => _categories;
   List<Establishment> get visitPlaces {
-    return _visitPlaces
+    var allVisitPlace = _visitPlaces
         .where((p0) => _categories.where((p0) => p0.selected).map((e) => e.id).toList().contains(p0.categoryId))
         .toList();
+    return allVisitPlace;
   }
 
   Future<void> getPlaces() async {
     try {
       _visitPlaces.value = [];
       _visitPlaces.value = await _establishmentService.getAll();
+      if(_visitPlaces.isNotEmpty){
+        await _getFirstImage();
+      }
     } catch (_) {
       _visitPlaces.value = [];
     }
+  }
+
+  _getFirstImage() async {
+    int i = 0;
+    for(var visitPlace in _visitPlaces){
+      if((visitPlace.establishmentMediaIds ?? []).isNotEmpty) {
+        final media = await _mediaService.getById(visitPlace.establishmentMediaIds!.first);
+        if (media != null) {visitPlace.imagesPlace.add(media.base64);
+        i++;}
+      }
+    }
+    update(['imagem']);
   }
 
   Future<void> getCategories() async {
