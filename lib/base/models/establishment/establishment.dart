@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:catalago_japamix/base/models/base/japamix_base.dart';
+import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'establishment.g.dart';
@@ -27,7 +28,9 @@ class Establishment extends JapaMixBase {
   @JsonKey(includeIfNull: false)
   final List<String>? categoryIds;
   @JsonKey(includeToJson: false, includeFromJson: false)
-  late List<String> imagesPlace;
+  late RxList<String> imagesPlace;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  late String categoryName;
   @JsonKey(includeFromJson: false)
   late CarouselController carouselController;
 
@@ -51,11 +54,11 @@ class Establishment extends JapaMixBase {
     required this.cep,
     required this.primaryTelephoneIsWhatsapp,
     required super.id,
-    List<String>? imagesPlace,
     this.establishmentMediaIds,
     this.categoryIds,
   }) : super(inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false) {
-    this.imagesPlace = [];
+    imagesPlace = <String>[].obs;
+    categoryName = "";
   }
 
   factory Establishment.fromJson(Map<String, dynamic> json) => _$EstablishmentFromJson(json);

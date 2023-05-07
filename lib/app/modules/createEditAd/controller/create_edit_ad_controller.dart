@@ -121,7 +121,7 @@ class CreateEditAdController extends GetxController {
     complementTextController = TextEditingController(text: place?.complement ?? "");
     latitudeController = TextEditingController(text: place?.latitude ?? "");
     longitudeController = TextEditingController(text: place?.longitude ?? "");
-    placeImages = place?.imagesPlace.isEmpty ?? true ? <String>[].obs : (place!.imagesPlace).obs;
+    placeImages = (place?.imagesPlace.isEmpty ?? true ? <String>[] : place!.imagesPlace).obs;
     ufsList = <String>[].obs;
     categories = <Category>[].obs;
     for (var category in categoriesList) {

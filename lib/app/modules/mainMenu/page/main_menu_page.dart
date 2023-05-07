@@ -20,7 +20,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
 
   @override
   void initState() {
-    controller = Get.put(MainMenuController());
+    controller = Get.put(MainMenuController(), tag: "main-menu-controller");
     super.initState();
   }
 
@@ -124,7 +124,6 @@ class _MainMenuPageState extends State<MainMenuPage> {
                               ),
                               child: CategoryListWidget(
                                 itens: controller.visitPlaces,
-                                categories: controller.categories,
                               ),
                             ),
                           ),

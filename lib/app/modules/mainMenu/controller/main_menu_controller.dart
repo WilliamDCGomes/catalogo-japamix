@@ -1,4 +1,3 @@
-import 'package:catalago_japamix/base/models/establishment/establishment.dart';
 import 'package:catalago_japamix/base/services/interfaces/icategory_service.dart';
 import 'package:catalago_japamix/base/services/interfaces/iestablishment_service.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +16,13 @@ import '../../../utils/sharedWidgets/popups/default_popup_widget.dart';
 import '../../../utils/sharedWidgets/text_button_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
 import '../../createEditAd/page/create_edit_ad_page.dart';
+import '../widgets/place_card_widget.dart';
 
 class MainMenuController extends GetxController {
   late bool allCategoriesSelected;
   late TextEditingController searchByName;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
-  late RxList<Establishment> _visitPlaces;
+  late RxList<PlaceCardWidget> _visitPlaces;
   late RxList<Category> _categories;
   late final IEstablishmentService _establishmentService;
   late final ICategoryService _categoryService;
@@ -30,7 +30,12 @@ class MainMenuController extends GetxController {
 
   MainMenuController() {
     _initializeVariables();
+  }
+
+  @override
+  void onInit() async {
     _initializeMethods();
+    super.onInit();
   }
 
   _initializeVariables() {
@@ -41,7 +46,7 @@ class MainMenuController extends GetxController {
     _categoryService = CategoryService();
     _mediaService = MediaService();
     _categories = <Category>[].obs;
-    _visitPlaces = <Establishment>[].obs;
+    _visitPlaces = <PlaceCardWidget>[].obs;
   }
 
   _initializeMethods() async {
@@ -49,14 +54,18 @@ class MainMenuController extends GetxController {
     await loadingWithSuccessOrErrorWidget.startAnimation();
     await getCategories();
     await getPlaces();
+
+    if(_visitPlaces.isNotEmpty){
+      _getFirstImage();
+    }
     await loadingWithSuccessOrErrorWidget.stopAnimation(justLoading: true);
   }
 
   //Getters
   List<Category> get categories => _categories;
-  List<Establishment> get visitPlaces {
+  List<PlaceCardWidget> get visitPlaces {
     var allVisitPlace = _visitPlaces
-        .where((p0) => _categories.where((p0) => p0.selected).map((e) => e.id).toList().contains(p0.categoryId))
+        .where((p0) => _categories.where((p0) => p0.selected).map((e) => e.id).toList().contains(p0.place.categoryId))
         .toList();
     return allVisitPlace;
   }
@@ -64,9 +73,16 @@ class MainMenuController extends GetxController {
   Future<void> getPlaces() async {
     try {
       _visitPlaces.value = [];
-      _visitPlaces.value = await _establishmentService.getAll();
-      if(_visitPlaces.isNotEmpty){
-        await _getFirstImage();
+      var places = await _establishmentService.getAll();
+
+      for(var place in places) {
+        place.categoryName = _categories.firstWhere((category) => category.id == place.categoryId).description;
+        _visitPlaces.add(
+          PlaceCardWidget(
+            place: place,
+            categories: _categories,
+          ),
+        );
       }
     } catch (_) {
       _visitPlaces.value = [];
@@ -74,15 +90,18 @@ class MainMenuController extends GetxController {
   }
 
   _getFirstImage() async {
-    int i = 0;
-    for(var visitPlace in _visitPlaces){
-      if((visitPlace.establishmentMediaIds ?? []).isNotEmpty) {
-        final media = await _mediaService.getById(visitPlace.establishmentMediaIds!.first);
-        if (media != null) {visitPlace.imagesPlace.add(media.base64);
-        i++;}
+    var listVisitPlaces = _visitPlaces;
+    listVisitPlaces.sort((a, b) => a.place.name.compareTo(b.place.name));
+    listVisitPlaces.sort((a, b) => a.place.categoryName.compareTo(b.place.categoryName));
+    for(var visitPlace in listVisitPlaces){
+      if((visitPlace.place.establishmentMediaIds ?? []).isNotEmpty) {
+        final media = await _mediaService.getById(visitPlace.place.establishmentMediaIds!.first);
+        if (media != null) {
+          visitPlace.place.imagesPlace.value = [media.base64];
+        }
       }
+      visitPlace.loading.value = false;
     }
-    update(['imagem']);
   }
 
   Future<void> getCategories() async {
