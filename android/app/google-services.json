@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "199534851401",
+    "project_id": "guia-japamix",
+    "storage_bucket": "guia-japamix.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199534851401:android:51eb19bf56093724239698",
+        "android_client_info": {
+          "package_name": "com.catalago_japamix.catalago"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACOcVQj4Z27zAPgVw5f_Km5URLOMaxwYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

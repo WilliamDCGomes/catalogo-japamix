@@ -1,4 +1,5 @@
 import 'package:catalago_japamix/app/modules/mainMenu/page/main_menu_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
@@ -24,6 +25,7 @@ class InitialPageController extends GetxController {
   @override
   void onInit() async {
     sharedPreferences = await SharedPreferences.getInstance();
+    await Firebase.initializeApp();
     await _loadFirstScreen();
     super.onInit();
   }

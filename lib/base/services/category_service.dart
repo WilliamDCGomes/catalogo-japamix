@@ -1,49 +1,76 @@
 import 'package:catalago_japamix/base/services/base/base_service.dart';
 import 'package:catalago_japamix/base/services/interfaces/icategory_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/category/category.dart';
 
 class CategoryService extends BaseService implements ICategoryService {
   @override
+  Future<bool> createOrEdit(Category category) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("category")
+          .doc()
+          .set(category.toJson())
+          .timeout(const Duration(seconds: 30));
+
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  @override
   Future<List<Category>> getAll() async {
     try {
-      final response = await get('$baseUrlApi/Category/GetAll');
-      if (hasErrorResponse(response)) throw Exception();
-      return (response.body as List).map((e) => Category.fromJson(e)).toList();
+      var categories = await FirebaseFirestore.instance
+          .collection("category")
+          .get()
+          .timeout(const Duration(seconds: 30));
+
+      return categories.docs.map((e) => Category.fromJson(e.data())).toList();
     } catch (_) {
-      return [];
+      return <Category>[];
     }
   }
 
   @override
   Future<Category?> getById(String id) async {
     try {
-      final response = await get('$baseUrlApi/Category/GetById', query: {"Id": id});
-      if (hasErrorResponse(response)) throw Exception();
-      return Category.fromJson(response.body);
-    } catch (_) {
-      return null;
-    }
-  }
+      var categories = await FirebaseFirestore.instance
+          .collection("category")
+          .where("id", isEqualTo: id)
+          .get()
+          .timeout(const Duration(seconds: 30));
 
-  @override
-  Future<bool> createOrEdit(Category category) async {
-    try {
-      final response = await post('$baseUrlApi/Category/CreateOrEdit', category.toJson());
-      if (response.statusCode != 200) throw Exception();
-      return true;
+      if(categories.size > 0) {
+        return Category.fromJson(categories.docs.first.data());
+      }
     } catch (_) {
-      return false;
     }
+    return null;
   }
 
   @override
   Future<bool> deleteCategory(String id) async {
     try {
-      final response = await delete('$baseUrlApi/Category/Delete', query: {"Id": id});
-      if (response.statusCode != 200) throw Exception();
-      return true;
-    } catch (_) {
-      return false;
+      var categories = await FirebaseFirestore.instance
+          .collection("category")
+          .where("id", isEqualTo: id)
+          .get()
+          .timeout(const Duration(seconds: 30));
+
+      if(categories.size > 0) {
+        for(var category in categories.docs) {
+          await category
+              .reference
+              .delete()
+              .timeout(const Duration(seconds: 30));
+        }
+        return true;
+      }
     }
+    catch(_){
+    }
+    return false;
   }
 }
