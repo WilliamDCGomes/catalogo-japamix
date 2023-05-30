@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../base/models/category/category.dart';
+import '../../../../base/models/establishment/establishment.dart';
 import '../../../../base/services/category_service.dart';
 import '../../../../base/services/establishment_service.dart';
 import '../../../../base/services/interfaces/imedia_service.dart';
@@ -55,9 +56,6 @@ class MainMenuController extends GetxController {
     await getCategories();
     await getPlaces();
 
-    if(_visitPlaces.isNotEmpty){
-      _getFirstImage();
-    }
     await loadingWithSuccessOrErrorWidget.stopAnimation(justLoading: true);
   }
 
@@ -66,6 +64,7 @@ class MainMenuController extends GetxController {
   List<PlaceCardWidget> get visitPlaces {
     List<String> selectedCategories = _categories.where((p0) => p0.selected).map((e) => e.id).toList();
     List<PlaceCardWidget> allVisitPlace = <PlaceCardWidget>[];
+    List<PlaceCardWidget> allPlaceSeparateByCategory = <PlaceCardWidget>[];
 
     for(var category in selectedCategories){
       for(var place in _visitPlaces){
@@ -74,7 +73,22 @@ class MainMenuController extends GetxController {
       }
     }
 
-    return allVisitPlace;
+    for(var place in allVisitPlace){
+      for(var category in place.place.categoryIds!){
+        if(selectedCategories.contains(category)){
+          var newPlace = PlaceCardWidget(
+            place: Establishment.fromJson(place.place.toJson()),
+            categories: _categories,
+          );
+          newPlace.place.categoryId = category;
+          newPlace.place.imagesPlace = _visitPlaces.firstWhere((p0) => p0.place.id == newPlace.place.id).place.imagesPlace;
+          newPlace.loading.value = false;
+          allPlaceSeparateByCategory.add(newPlace);
+        }
+      }
+    }
+
+    return allPlaceSeparateByCategory;
   }
 
   Future<void> getCategories() async {
@@ -98,6 +112,11 @@ class MainMenuController extends GetxController {
 
       for(var place in places) {
         place.categoryName = _categories.firstWhere((category) => place.categoryIds!.contains(category.id)).description;
+        var image = await _getFirstImage(place.establishmentMediaIds!.first);
+        if(image.isEmpty && place.establishmentMediaIds!.length > 1) {
+          image = await _getFirstImage(place.establishmentMediaIds![1]);
+        }
+        place.imagesPlace.add(image);
         _visitPlaces.add(
           PlaceCardWidget(
             place: place,
@@ -110,19 +129,17 @@ class MainMenuController extends GetxController {
     }
   }
 
-  _getFirstImage() async {
-    var listVisitPlaces = _visitPlaces;
-    listVisitPlaces.sort((a, b) => a.place.name.compareTo(b.place.name));
-    listVisitPlaces.sort((a, b) => a.place.categoryName.compareTo(b.place.categoryName));
-    for(var visitPlace in listVisitPlaces){
-      if((visitPlace.place.establishmentMediaIds ?? []).isNotEmpty) {
-        final media = await _mediaService.getById(visitPlace.place.establishmentMediaIds!.first);
+  Future<String> _getFirstImage(String mediaId) async {
+    try{
+      if(mediaId.isNotEmpty) {
+        final media = await _mediaService.getById(mediaId);
         if (media != null) {
-          visitPlace.place.imagesPlace.value = [media.base64];
+          return media.base64;
         }
       }
-      visitPlace.loading.value = false;
     }
+    catch(_){}
+    return "";
   }
 
   openFilter() async {

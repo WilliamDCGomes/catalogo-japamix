@@ -26,6 +26,8 @@ class Establishment extends JapaMixBase {
   List<String>? establishmentMediaIds;
   @JsonKey(includeIfNull: false)
   List<String>? categoryIds;
+  @JsonKey(includeIfNull: false)
+  String? categoryId;
   @JsonKey(includeToJson: false, includeFromJson: false)
   late RxList<String> imagesPlace;
   @JsonKey(includeToJson: false, includeFromJson: false)
@@ -57,6 +59,7 @@ class Establishment extends JapaMixBase {
   }) : super(inclusion: DateTime.now(), alteration: DateTime.now(), deleted: false) {
     imagesPlace = <String>[].obs;
     categoryName = "";
+    categoryId = "";
   }
 
   factory Establishment.fromJson(Map<String, dynamic> json) => _$EstablishmentFromJson(json);
