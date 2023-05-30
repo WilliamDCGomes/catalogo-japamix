@@ -2,8 +2,12 @@ import 'package:catalago_japamix/base/services/base/base_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/establishmentMedia/establishment_media.dart';
 import 'interfaces/iestablishment_media_service.dart';
+import 'interfaces/imedia_service.dart';
+import 'media_service.dart';
 
 class EstablishmentMediaService extends BaseService implements IEstablishmentMediaService {
+  final IMediaService _mediaService = MediaService();
+
   @override
   Future<bool> createOrEdit(EstablishmentMedia establishmentMedia) async {
     try {
@@ -74,16 +78,18 @@ class EstablishmentMediaService extends BaseService implements IEstablishmentMed
   }
 
   @override
-  Future<bool> deleteEstablishmentMedia(String id) async {
+  Future<bool> deleteEstablishmentMedia(String establishmentId) async {
     try {
       var mediasFromEstablishment = await FirebaseFirestore.instance
           .collection("establishmentMedia")
-          .where("id", isEqualTo: id)
+          .where("establishmentId", isEqualTo: establishmentId)
           .get()
           .timeout(const Duration(seconds: 30));
 
       if(mediasFromEstablishment.size > 0) {
         for(var media in mediasFromEstablishment.docs) {
+          await _mediaService.deleteMedia(media.data()["mediaId"]);
+
           await media
               .reference
               .delete()

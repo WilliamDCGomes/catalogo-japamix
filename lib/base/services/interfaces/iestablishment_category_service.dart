@@ -6,5 +6,5 @@ abstract class IEstablishmentCategoryService {
   Future<EstablishmentCategory?> getById(String id);
   Future<bool> createOrEdit(EstablishmentCategory establishment);
   Future<bool> removeCategory(String categoryId, String establishmentId);
-  Future<bool> deleteEstablishmentCategory(String id);
+  Future<bool> deleteEstablishmentCategory(String establishmentId);
 }

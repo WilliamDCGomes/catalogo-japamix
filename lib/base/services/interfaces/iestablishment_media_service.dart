@@ -5,5 +5,5 @@ abstract class IEstablishmentMediaService {
   Future<List<String>> getAllEstablishmentMediaIds(String establishmentId);
   Future<EstablishmentMedia?> getById(String id);
   Future<bool> createOrEdit(EstablishmentMedia establishmentMedia);
-  Future<bool> deleteEstablishmentMedia(String id);
+  Future<bool> deleteEstablishmentMedia(String establishmentId);
 }

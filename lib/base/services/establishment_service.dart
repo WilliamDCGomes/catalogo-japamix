@@ -8,7 +8,7 @@ import 'interfaces/iestablishment_media_service.dart';
 import 'interfaces/iestablishment_service.dart';
 
 class EstablishmentService extends BaseService implements IEstablishmentService {
-  final IEstablishmentMediaService _establishmentService = EstablishmentMediaService();
+  final IEstablishmentMediaService _establishmentMediaService = EstablishmentMediaService();
   final IEstablishmentCategoryService _establishmentCategoryService = EstablishmentCategoryService();
 
   @override
@@ -37,7 +37,7 @@ class EstablishmentService extends BaseService implements IEstablishmentService 
       var allEstablishments = establishments.docs.map((e) => Establishment.fromJson(e.data())).toList();
 
       for(var establishment in allEstablishments) {
-        establishment.establishmentMediaIds = await _establishmentService.getAllEstablishmentMediaIds(establishment.id);
+        establishment.establishmentMediaIds = await _establishmentMediaService.getAllEstablishmentMediaIds(establishment.id);
         establishment.categoryIds = await _establishmentCategoryService.getAllCategoryIds(establishment.id);
       }
       return allEstablishments;
@@ -74,6 +74,9 @@ class EstablishmentService extends BaseService implements IEstablishmentService 
 
       if(establishments.size > 0) {
         for(var establishment in establishments.docs) {
+          await _establishmentMediaService.deleteEstablishmentMedia(establishment.data()["id"]);
+          await _establishmentCategoryService.deleteEstablishmentCategory(establishment.data()["id"]);
+
           await establishment
               .reference
               .delete()

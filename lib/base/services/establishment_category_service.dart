@@ -99,11 +99,11 @@ class EstablishmentCategoryService extends BaseService implements IEstablishment
   }
 
   @override
-  Future<bool> deleteEstablishmentCategory(String id) async {
+  Future<bool> deleteEstablishmentCategory(String establishmentId) async {
     try {
       var establishmentCategories = await FirebaseFirestore.instance
           .collection("establishmentCategory")
-          .where("id", isEqualTo: id)
+          .where("establishmentId", isEqualTo: establishmentId)
           .get()
           .timeout(const Duration(seconds: 30));
 

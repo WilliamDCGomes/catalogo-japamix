@@ -245,8 +245,8 @@ class CreateEditAdController extends GetxController {
       if(!verifyFields()) return;
 
       loadingWithSuccessOrErrorWidget.startAnimation();
-      if(!newPlace) {
-        ///TODO REMOVER OS REGISTROS EM ESTABLISHMENT, ESTABLISHMENTCATEGORY, ESTABLISHMENTMEDIA E MEDIA
+      if(!newPlace && place != null && place!.id.isNotEmpty) {
+        await _establishmentService.deleteEstablishment(place!.id);
       }
 
       final establishment = Establishment(
