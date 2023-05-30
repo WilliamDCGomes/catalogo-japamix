@@ -64,10 +64,31 @@ class MainMenuController extends GetxController {
   //Getters
   List<Category> get categories => _categories;
   List<PlaceCardWidget> get visitPlaces {
-    var allVisitPlace = _visitPlaces
-        .where((p0) => _categories.where((p0) => p0.selected).map((e) => e.id).toList().contains(p0.place.categoryId))
-        .toList();
+    List<String> selectedCategories = _categories.where((p0) => p0.selected).map((e) => e.id).toList();
+    List<PlaceCardWidget> allVisitPlace = <PlaceCardWidget>[];
+
+    for(var category in selectedCategories){
+      for(var place in _visitPlaces){
+        if(place.place.categoryIds == null) break;
+        if(place.place.categoryIds!.contains(category) && !allVisitPlace.map((e) => e.place.id).toList().contains(place.place.id)) allVisitPlace.add(place);
+      }
+    }
+
     return allVisitPlace;
+  }
+
+  Future<void> getCategories() async {
+    try {
+      _categories.value = [];
+      _categories.value = await _categoryService.getAll();
+    } catch (_) {
+      _categories.value = [];
+    } finally {
+      for (var category in _categories) {
+        category.selected = true;
+      }
+      _categories.sort((a, b) => a.description.compareTo(b.description));
+    }
   }
 
   Future<void> getPlaces() async {
@@ -76,7 +97,7 @@ class MainMenuController extends GetxController {
       var places = await _establishmentService.getAll();
 
       for(var place in places) {
-        place.categoryName = _categories.firstWhere((category) => category.id == place.categoryId).description;
+        place.categoryName = _categories.firstWhere((category) => place.categoryIds!.contains(category.id)).description;
         _visitPlaces.add(
           PlaceCardWidget(
             place: place,
@@ -101,20 +122,6 @@ class MainMenuController extends GetxController {
         }
       }
       visitPlace.loading.value = false;
-    }
-  }
-
-  Future<void> getCategories() async {
-    try {
-      _categories.value = [];
-      _categories.value = await _categoryService.getAll();
-    } catch (_) {
-      _categories.value = [];
-    } finally {
-      for (var category in _categories) {
-        category.selected = true;
-      }
-      _categories.sort((a, b) => a.description.compareTo(b.description));
     }
   }
 

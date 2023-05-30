@@ -21,7 +21,6 @@ Establishment _$EstablishmentFromJson(Map<String, dynamic> json) =>
       complement: json['complement'] as String?,
       latitude: json['latitude'] as String?,
       longitude: json['longitude'] as String?,
-      categoryId: json['categoryId'] as String?,
       cep: json['cep'] as String?,
       primaryTelephoneIsWhatsapp: json['primaryTelephoneIsWhatsapp'] as bool,
       id: json['id'] as String,
@@ -51,7 +50,6 @@ Map<String, dynamic> _$EstablishmentToJson(Establishment instance) {
     'complement': instance.complement,
     'latitude': instance.latitude,
     'longitude': instance.longitude,
-    'categoryId': instance.categoryId,
   };
 
   void writeNotNull(String key, dynamic value) {

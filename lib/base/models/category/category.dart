@@ -1,6 +1,5 @@
 import 'package:catalago_japamix/base/models/base/japamix_base.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:uuid/uuid.dart';
 
 part 'category.g.dart';
 

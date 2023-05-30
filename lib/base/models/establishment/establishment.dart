@@ -22,11 +22,10 @@ class Establishment extends JapaMixBase {
   final String? complement;
   final String? latitude;
   final String? longitude;
-  final String? categoryId;
   @JsonKey(includeIfNull: false)
-  final List<String>? establishmentMediaIds;
+  List<String>? establishmentMediaIds;
   @JsonKey(includeIfNull: false)
-  final List<String>? categoryIds;
+  List<String>? categoryIds;
   @JsonKey(includeToJson: false, includeFromJson: false)
   late RxList<String> imagesPlace;
   @JsonKey(includeToJson: false, includeFromJson: false)
@@ -50,7 +49,6 @@ class Establishment extends JapaMixBase {
     required this.complement,
     required this.latitude,
     required this.longitude,
-    required this.categoryId,
     required this.cep,
     required this.primaryTelephoneIsWhatsapp,
     required super.id,

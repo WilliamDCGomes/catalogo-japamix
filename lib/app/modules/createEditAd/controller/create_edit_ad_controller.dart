@@ -1,4 +1,3 @@
-import 'package:catalago_japamix/app/modules/mainMenu/controller/main_menu_controller.dart';
 import 'package:catalago_japamix/app/modules/categoryAd/page/category_ad_page.dart';
 import 'package:catalago_japamix/app/modules/mainMenu/page/main_menu_page.dart';
 import 'package:catalago_japamix/app/utils/helpers/view_picture.dart';
@@ -263,7 +262,6 @@ class CreateEditAdController extends GetxController {
         longitude: longitudeController.text,
         complement: complementTextController.text,
         primaryTelephoneIsWhatsapp: phoneItsWhatsapp.value,
-        categoryId: null,
       );
       final createEstablishment = await _establishmentService.createOrEdit(establishment);
       if (!createEstablishment) throw Exception();
@@ -319,10 +317,10 @@ class CreateEditAdController extends GetxController {
         }
       }
       if (!createCategory) throw Exception();
-      await Get.find<MainMenuController>().getPlaces();
+      //await Get.find<MainMenuController>().getPlaces();
 
       await loadingWithSuccessOrErrorWidget.stopAnimation();
-     await showDialog(
+      await showDialog(
         context: Get.context!,
         barrierDismissible: false,
         builder: (BuildContext context) {

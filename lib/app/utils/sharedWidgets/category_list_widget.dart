@@ -21,7 +21,7 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
   Widget build(BuildContext context) {
     return GroupedListView<dynamic, String>(
       elements: widget.itens,
-      groupBy: (item) => item.categories.firstWhere((category) => category.id == item.place.categoryId).description,
+      groupBy: (item) => item.categories.firstWhere((category) => category.id == item.place.categoryIds.first).description,
       groupSeparatorBuilder: (String groupByValue) => Padding(
         padding: EdgeInsets.only(bottom: 1.h),
         child: TextWidget(
