@@ -560,57 +560,60 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                   enableSuggestions: true,
                                 ),
                               ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextFieldWidget(
-                                      focusNode: controller.phone2FocusNode,
-                                      controller: controller.phone2TextEditingController,
-                                      hintText: "Latitude",
-                                      textInputAction: TextInputAction.next,
-                                      height: PlatformType.isTablet(context) ? 7.h : 9.h,
-                                      width: double.infinity,
-                                      keyboardType: TextInputType.phone,
-                                      maskTextInputFormatter: [MasksForTextFields.phoneNumberMask],
-                                      hasError: controller.phone2HasError.value,
-                                      validator: (String? value) {
-                                        String? validation = TextFieldValidators.phoneValidation(value);
-                                        controller.phone2HasError.value = validation != null && validation != "";
-                                        return validation;
-                                      },
-                                      onEditingComplete: () {
-                                        controller.phone3FocusNode.requestFocus();
-                                      },
-                                    ),
+                              Visibility(
+                                visible: false,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: 1.h),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFieldWidget(
+                                          focusNode: controller.phone2FocusNode,
+                                          controller: controller.phone2TextEditingController,
+                                          hintText: "Latitude",
+                                          textInputAction: TextInputAction.next,
+                                          height: PlatformType.isTablet(context) ? 7.h : 9.h,
+                                          width: double.infinity,
+                                          keyboardType: TextInputType.phone,
+                                          maskTextInputFormatter: [MasksForTextFields.phoneNumberMask],
+                                          hasError: controller.phone2HasError.value,
+                                          validator: (String? value) {
+                                            String? validation = TextFieldValidators.phoneValidation(value);
+                                            controller.phone2HasError.value = validation != null && validation != "";
+                                            return validation;
+                                          },
+                                          onEditingComplete: () {
+                                            controller.phone3FocusNode.requestFocus();
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 5.w,
+                                      ),
+                                      Expanded(
+                                        child: TextFieldWidget(
+                                          focusNode: controller.phone3FocusNode,
+                                          controller: controller.phone3TextEditingController,
+                                          hintText: "Longitude",
+                                          textInputAction: TextInputAction.next,
+                                          height: PlatformType.isTablet(context) ? 7.h : 9.h,
+                                          width: double.infinity,
+                                          keyboardType: TextInputType.phone,
+                                          maskTextInputFormatter: [MasksForTextFields.phoneNumberMask],
+                                          hasError: controller.phone3HasError.value,
+                                          validator: (String? value) {
+                                            String? validation = TextFieldValidators.phoneValidation(value);
+                                            controller.phone3HasError.value = validation != null && validation != "";
+                                            return validation;
+                                          },
+                                          onEditingComplete: () {
+                                            controller.cepFocusNode.requestFocus();
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  Expanded(
-                                    child: TextFieldWidget(
-                                      focusNode: controller.phone3FocusNode,
-                                      controller: controller.phone3TextEditingController,
-                                      hintText: "Longitude",
-                                      textInputAction: TextInputAction.next,
-                                      height: PlatformType.isTablet(context) ? 7.h : 9.h,
-                                      width: double.infinity,
-                                      keyboardType: TextInputType.phone,
-                                      maskTextInputFormatter: [MasksForTextFields.phoneNumberMask],
-                                      hasError: controller.phone3HasError.value,
-                                      validator: (String? value) {
-                                        String? validation = TextFieldValidators.phoneValidation(value);
-                                        controller.phone3HasError.value = validation != null && validation != "";
-                                        return validation;
-                                      },
-                                      onEditingComplete: () {
-                                        controller.cepFocusNode.requestFocus();
-                                      },
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
                               SizedBox(
                                 height: 1.h,
