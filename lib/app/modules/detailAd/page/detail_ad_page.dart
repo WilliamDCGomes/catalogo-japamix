@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:catalago_japamix/app/modules/detailAd/controller/detail_ad_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -266,21 +268,13 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                       padding: EdgeInsets.only(top: 1.h, bottom: 2.h),
                                       child: TextButton(
                                         onPressed: () async {
-                                          if (controller.visitPlace.latitude != null &&
-                                              controller.visitPlace.longitude != null) {
-                                            final completeAddress =
-                                                "https://www.google.com/maps/search/?api=1&query=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
+                                          String completeAddress = "https://www.google.com/maps/search/?api=1&query=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
+                                              "${controller.visitPlace.district ?? ''}, ${controller.visitPlace.cep ?? ''}";
+                                          if(Platform.isIOS){
+                                            completeAddress = "http://maps.apple.com/?q=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
                                                 "${controller.visitPlace.district ?? ''}, ${controller.visitPlace.cep ?? ''}";
-                                            await launchUrl(Uri.parse(completeAddress),
-                                                mode: LaunchMode.externalNonBrowserApplication);
-                                            return;
                                           }
-                                          final address = controller.visitPlace.address?.replaceAll(" ", "+");
-                                          final state = controller.visitPlace.state?.replaceAll(" ", "+");
-                                          final city = controller.visitPlace.city?.replaceAll(" ", "+");
-                                          final number = controller.visitPlace.number?.replaceAll(" ", "+");
-                                          final completeAddress =
-                                              "https://www.google.com/maps/search/?api=1&query=${address ?? ''}+${number ?? ''}+${city ?? ''}+${state ?? ''}";
+
                                           await launchUrl(Uri.parse(completeAddress),
                                               mode: LaunchMode.externalNonBrowserApplication);
                                         },
@@ -331,7 +325,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                             mode: LaunchMode.externalNonBrowserApplication);
                                       } else {
                                         launchUrl(Uri.parse("tel:${controller.visitPlace.primaryTelephone}"),
-                                            mode: LaunchMode.externalNonBrowserApplication);
+                                            mode: Platform.isAndroid ? LaunchMode.externalNonBrowserApplication : LaunchMode.externalApplication);
                                       }
                                     },
                                     child: Row(
@@ -361,7 +355,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     TextButton(
                                       onPressed: () {
                                         launchUrl(Uri.parse("tel:${controller.visitPlace.secondaryTelephone}"),
-                                            mode: LaunchMode.externalNonBrowserApplication);
+                                            mode: Platform.isAndroid ? LaunchMode.externalNonBrowserApplication : LaunchMode.externalApplication);
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -390,7 +384,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     TextButton(
                                       onPressed: () {
                                         launchUrl(Uri.parse("tel:${controller.visitPlace.tertiaryTelephone}"),
-                                            mode: LaunchMode.externalNonBrowserApplication);
+                                            mode: Platform.isAndroid ? LaunchMode.externalNonBrowserApplication : LaunchMode.externalApplication);
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,

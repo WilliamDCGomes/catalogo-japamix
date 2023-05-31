@@ -49,5 +49,17 @@
 		<false/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSPhotoLibraryUsageDescription</key>
+        <string>É necessário a permissão para Carregar imagens da sua Galeria</string>
+        <key>NSCameraUsageDescription</key>
+        <string>É necessário a permissão para tirar fotos e gravar vídeos com a Câmera do seu aparelho</string>
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+          <string>É necessário a permissão para verificar se existe algum aplicativo compatível com mapas</string>
+        </array>
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+          <string>É necessário a permissão para abrir os números de telefone direto no discador</string>
+        </array>
 	</dict>
 </plist>

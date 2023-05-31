@@ -329,6 +329,7 @@ class CreateEditAdController extends GetxController {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return InformationPopup(
+            success: true,
             warningMessage: "Anúncio ${newPlace ? "salvo" : "atualizado"} com sucesso!",
           );
         },
