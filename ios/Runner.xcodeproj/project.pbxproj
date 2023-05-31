@@ -26,6 +26,7 @@
 		BBCD670E8290CF198D4D1E81 /* devDebug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = FDD27B78EBE7F71151008471 /* devDebug.xcconfig */; };
 		D50BFBB229CCDE086F30CBAE /* devProfile.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 8D4C2FFB692F17638A703564 /* devProfile.xcconfig */; };
 		EBBF8CC66437C1AD117C69B5 /* prodRelease.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 3B9DE4A7B0B5EF55B51454F1 /* prodRelease.xcconfig */; };
+		FAAE61562A26E689008A6D79 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAAE61552A26E689008A6D79 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -78,6 +79,7 @@
 		DFF4B2087CE5802D46592F39 /* hmlgRelease.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = hmlgRelease.xcconfig; path = Flutter/hmlgRelease.xcconfig; sourceTree = "<group>"; };
 		E800533A23B0D04145E9E9A7 /* prodLaunchScreen.storyboard */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.storyboard; name = prodLaunchScreen.storyboard; path = Runner/prodLaunchScreen.storyboard; sourceTree = "<group>"; };
 		EF209F1793C2A5531C25B593 /* hmlgDebug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = hmlgDebug.xcconfig; path = Flutter/hmlgDebug.xcconfig; sourceTree = "<group>"; };
+		FAAE61552A26E689008A6D79 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FBB9C26FE49103036940DB2A /* prodProfile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = prodProfile.xcconfig; path = Flutter/prodProfile.xcconfig; sourceTree = "<group>"; };
 		FDD27B78EBE7F71151008471 /* devDebug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = devDebug.xcconfig; path = Flutter/devDebug.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -151,6 +153,7 @@
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
 				97C147021CF9000F007C117D /* Info.plist */,
+				FAAE61552A26E689008A6D79 /* GoogleService-Info.plist */,
 				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
@@ -199,6 +202,8 @@
 			dependencies = (
 			);
 			name = Runner;
+			packageProductDependencies = (
+			);
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
@@ -227,6 +232,8 @@
 				Base,
 			);
 			mainGroup = 97C146E51CF9000F007C117D;
+			packageReferences = (
+			);
 			productRefGroup = 97C146EF1CF9000F007C117D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -253,6 +260,7 @@
 				69C1694413A03EC1AB52C2C6 /* hmlgRelease.xcconfig in Resources */,
 				082DB59BD238EEA0D91AB73D /* prodDebug.xcconfig in Resources */,
 				1887D194679421D11EAE7B0B /* prodProfile.xcconfig in Resources */,
+				FAAE61562A26E689008A6D79 /* GoogleService-Info.plist in Resources */,
 				EBBF8CC66437C1AD117C69B5 /* prodRelease.xcconfig in Resources */,
 				85FEB901B8B5822033671567 /* devLaunchScreen.storyboard in Resources */,
 				711CC0F00C4C32D708577103 /* hmlgLaunchScreen.storyboard in Resources */,
@@ -309,6 +317,7 @@
 			files = (
 			);
 			inputPaths = (
+				"${TARGET_BUILD_DIR}/${INFOPLIST_PATH}",
 			);
 			name = "Thin Binary";
 			outputPaths = (
