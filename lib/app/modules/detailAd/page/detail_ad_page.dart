@@ -10,6 +10,7 @@ import '../../../utils/helpers/paths.dart';
 import '../../../utils/helpers/view_picture.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/picture_ad_widget.dart';
+import '../../../utils/sharedWidgets/popups/confirmation_popup.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
 import '../../createEditAd/page/create_edit_ad_page.dart';
@@ -103,23 +104,49 @@ class _DetailAdPageState extends State<DetailAdPage> {
                         ),
                         Align(
                           alignment: Alignment.centerRight,
-                          child: InkWell(
-                            onTap: () async {
-                              final establishment = await Get.to(() => CreateEditAdPage(
-                                    place: controller.visitPlace,
-                                    categories: widget.categories,
-                                  ));
-                              if (establishment != null) {
-                                setState(() {
-                                  controller.visitPlace = establishment;
-                                });
-                              }
-                            },
-                            child: Icon(
-                              Icons.edit,
-                              color: AppColors.blackColor,
-                              size: 3.h,
-                            ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  final establishment = await Get.to(() => CreateEditAdPage(
+                                        place: controller.visitPlace,
+                                        categories: widget.categories,
+                                      ));
+                                  if (establishment != null) {
+                                    setState(() {
+                                      controller.visitPlace = establishment;
+                                    });
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.edit,
+                                  color: AppColors.blackColor,
+                                  size: 3.h,
+                                ),
+                              ),
+                              SizedBox(width: 4.w),
+                              InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: Get.context!,
+                                    builder: (BuildContext context) {
+                                      return ConfirmationPopup(
+                                        title: "Aviso",
+                                        subTitle: "Tem certeza que deseja apagar esse anúncio?",
+                                        firstButton: () {},
+                                        secondButton: () => controller.deleteAd(),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.delete,
+                                  color: AppColors.blackColor,
+                                  size: 3.h,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -242,7 +269,8 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                           if (controller.visitPlace.latitude != null &&
                                               controller.visitPlace.longitude != null) {
                                             final completeAddress =
-                                                "https://www.google.com/maps/search/?api=1&query=${controller.visitPlace.latitude ?? ''},${controller.visitPlace.longitude ?? ''}";
+                                                "https://www.google.com/maps/search/?api=1&query=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
+                                                "${controller.visitPlace.district ?? ''}, ${controller.visitPlace.cep ?? ''}";
                                             await launchUrl(Uri.parse(completeAddress),
                                                 mode: LaunchMode.externalNonBrowserApplication);
                                             return;

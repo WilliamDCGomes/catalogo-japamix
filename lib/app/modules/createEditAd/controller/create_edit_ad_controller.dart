@@ -333,11 +333,6 @@ class CreateEditAdController extends GetxController {
           );
         },
       );
-      /*if (place != null) {
-        Get.back(result: establishment);
-      } else {
-        Get.back(result: categories);
-      }*/
       Get.offAll(() => const MainMenuPage());
     } catch (_) {
       await loadingWithSuccessOrErrorWidget.stopAnimation(fail: true);
@@ -345,8 +340,8 @@ class CreateEditAdController extends GetxController {
         context: Get.context!,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return const InformationPopup(
-            warningMessage: "Erro ao salvar anúncio!\nTente novamente mais tarde.",
+          return InformationPopup(
+            warningMessage: "Erro ao ${newPlace ? "salvar" : "atualizar"} o anúncio!\nTente novamente mais tarde.",
           );
         },
       );
