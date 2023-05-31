@@ -116,10 +116,12 @@ class _MainMenuPageState extends State<MainMenuPage> {
                           child: Obx(
                             () => Visibility(
                               visible: controller.visitPlaces.isNotEmpty,
-                              replacement: const Center(
+                              replacement: Center(
                                 child: TextWidget(
                                   "Nenhum local encontrado",
                                   textColor: AppColors.blackColor,
+                                  fontSize: 18.sp,
+                                  maxLines: 2,
                                 ),
                               ),
                               child: CategoryListWidget(

@@ -68,6 +68,7 @@ class DetailAdController extends GetxController {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return const InformationPopup(
+            success: true,
             warningMessage: "Anúncio apagado com sucesso!",
           );
         },
