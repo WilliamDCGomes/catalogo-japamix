@@ -135,10 +135,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
                     onPressed: () => controller.addAd(),
                     backgroundColor: AppColors.redColor,
                     elevation: 3,
-                    child: Icon(
+                    child: const Icon(
                       Icons.add,
                       color: AppColors.whiteColor,
-                      size: 4.h,
+                      size: 40,
                     ),
                   ),
                 ),
