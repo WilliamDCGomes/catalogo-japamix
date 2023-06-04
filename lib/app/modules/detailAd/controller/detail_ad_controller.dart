@@ -4,6 +4,7 @@ import 'package:catalago_japamix/base/services/interfaces/imedia_service.dart';
 import 'package:catalago_japamix/base/services/media_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../../base/models/establishment/establishment.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 import '../../../utils/sharedWidgets/popups/information_popup.dart';
@@ -87,5 +88,12 @@ class DetailAdController extends GetxController {
         },
       );
     }
+  }
+
+  shareAd(){
+    Share.share(
+      'Confira o estabelecimento ${visitPlace.name} através do link: https://www.compartilharlink.com/${visitPlace.id}',
+      subject: 'Compartilhamento de link',
+    );
   }
 }

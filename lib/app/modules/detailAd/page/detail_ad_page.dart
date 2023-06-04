@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:catalago_japamix/app/modules/detailAd/controller/detail_ad_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
@@ -130,24 +128,7 @@ class _DetailAdPageState extends State<DetailAdPage> {
                               ),
                               SizedBox(width: 4.w),
                               InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: Get.context!,
-                                    builder: (BuildContext context) {
-                                      return ConfirmationPopup(
-                                        title: "Aviso",
-                                        subTitle: "Tem certeza que deseja compartilhar esse anúncio?",
-                                        firstButton: () {},
-                                        secondButton: () {
-                                          String mensagem =
-                                              'Confira o estabelecimento ${widget.establishment.name} através do link: https://www.compartilharlink.com/${widget.establishment.id}';
-
-                                          Share.share(mensagem, subject: 'Compartilhamento de link');
-                                        },
-                                      );
-                                    },
-                                  );
-                                },
+                                onTap: () => controller.shareAd(),
                                 child: Icon(
                                   Icons.share,
                                   color: AppColors.blackColor,
