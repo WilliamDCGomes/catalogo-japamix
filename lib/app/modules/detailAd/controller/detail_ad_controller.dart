@@ -92,7 +92,7 @@ class DetailAdController extends GetxController {
 
   shareAd(){
     Share.share(
-      'Confira o estabelecimento ${visitPlace.name} através do link: https://www.compartilharlink.com/${visitPlace.id}',
+      'Confira o estabelecimento ${visitPlace.name} através do link: https://www.catalagojapamix.com/${visitPlace.id}',
       subject: 'Compartilhamento de link',
     );
   }

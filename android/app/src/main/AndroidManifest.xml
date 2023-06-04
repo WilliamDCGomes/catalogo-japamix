@@ -14,8 +14,8 @@
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-      <data android:scheme="https" android:host="www.compartilharlink.com" />
-      <data android:scheme="app" android:host="compartilharlink" />
+      <data android:scheme="https" android:host="www.catalagojapamix.com" />
+      <data android:scheme="app" android:host="catalagojapamix" />
     </intent-filter>
     </activity>
     <!-- Don't delete the meta-data below.
