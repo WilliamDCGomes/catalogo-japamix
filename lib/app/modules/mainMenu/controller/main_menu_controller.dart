@@ -1,8 +1,10 @@
+import 'package:catalago_japamix/app/modules/detailAd/page/detail_ad_page.dart';
 import 'package:catalago_japamix/base/services/interfaces/icategory_service.dart';
 import 'package:catalago_japamix/base/services/interfaces/iestablishment_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:uni_links/uni_links.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
 import '../../../../base/services/category_service.dart';
@@ -14,6 +16,7 @@ import '../../../utils/sharedWidgets/category_ad_widget.dart';
 import '../../../utils/sharedWidgets/checkbox_list_tile_widget.dart';
 import '../../../utils/sharedWidgets/loading_with_success_or_error_widget.dart';
 import '../../../utils/sharedWidgets/popups/default_popup_widget.dart';
+import '../../../utils/sharedWidgets/popups/information_popup.dart';
 import '../../../utils/sharedWidgets/text_button_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
 import '../../createEditAd/page/create_edit_ad_page.dart';
@@ -66,16 +69,17 @@ class MainMenuController extends GetxController {
     List<PlaceCardWidget> allVisitPlace = <PlaceCardWidget>[];
     List<PlaceCardWidget> allPlaceSeparateByCategory = <PlaceCardWidget>[];
 
-    for(var category in selectedCategories){
-      for(var place in _visitPlaces){
-        if(place.place.categoryIds == null) break;
-        if(place.place.categoryIds!.contains(category) && !allVisitPlace.map((e) => e.place.id).toList().contains(place.place.id)) allVisitPlace.add(place);
+    for (var category in selectedCategories) {
+      for (var place in _visitPlaces) {
+        if (place.place.categoryIds == null) break;
+        if (place.place.categoryIds!.contains(category) &&
+            !allVisitPlace.map((e) => e.place.id).toList().contains(place.place.id)) allVisitPlace.add(place);
       }
     }
 
-    for(var place in allVisitPlace){
-      for(var category in place.place.categoryIds!){
-        if(selectedCategories.contains(category)){
+    for (var place in allVisitPlace) {
+      for (var category in place.place.categoryIds!) {
+        if (selectedCategories.contains(category)) {
           var newPlace = PlaceCardWidget(
             place: Establishment.fromJson(place.place.toJson()),
             categories: _categories,
@@ -110,13 +114,13 @@ class MainMenuController extends GetxController {
       _visitPlaces.value = [];
       var places = await _establishmentService.getAll();
 
-      for(var place in places) {
+      for (var place in places) {
         place.categoryName = _categories.firstWhere((category) => place.categoryIds!.contains(category.id)).description;
-        var image = await _getFirstImage(place.establishmentMediaIds!.first);
-        if(image.isEmpty && place.establishmentMediaIds!.length > 1) {
-          image = await _getFirstImage(place.establishmentMediaIds![1]);
-        }
-        place.imagesPlace.add(image);
+        // var image = await _getFirstImage(place.establishmentMediaIds!.first);
+        // if (image.isEmpty && place.establishmentMediaIds!.length > 1) {
+        //   image = await _getFirstImage(place.establishmentMediaIds![1]);
+        // }
+        // place.imagesPlace.add(image);
         _visitPlaces.add(
           PlaceCardWidget(
             place: place,
@@ -126,19 +130,59 @@ class MainMenuController extends GetxController {
       }
     } catch (_) {
       _visitPlaces.value = [];
+    } finally {
+      processLink();
+    }
+  }
+
+  Future<void> processLink() async {
+    // Obtém o link que abriu o aplicativo
+    final initialLink = await getInitialLink();
+
+    try {
+      // Verifica se o link não é nulo e corresponde ao esquema de URL personalizado do seu aplicativo
+      //compartilharlink://estabelecimento?id=9dc8ddc3-51be-47a1-aae5-bae3df4dd228
+      if (initialLink != null && initialLink.contains('compartilharlink')) {
+        // Extraia os parâmetros, se houver
+        // final Uri linkUri = Uri.parse(initialLink);
+        String id = initialLink.substring(32);
+
+        // Obtenha os parâmetros específicos da URL, como a tela e os valores dos parâmetros
+        // final String id = linkUri.queryParameters['id']!;
+        final visitPlace = _visitPlaces.firstWhereOrNull((element) => element.place.id == id);
+
+        if (visitPlace == null) {
+          showDialog(
+            context: Get.context!,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return const InformationPopup(
+                warningMessage: "Não foi possível encontrar o estabelecimento que você está procurando.",
+              );
+            },
+          );
+        }
+        // Navegue para a tela apropriada com base nos parâmetros recebidos
+        // Por exemplo, usando um roteador de navegação (como o `Navigator` do Flutter)
+        if (visitPlace != null) {
+          Get.to(() => DetailAdPage(establishment: visitPlace.place, categories: visitPlace.categories));
+        }
+        // Adicione mais condições para outras telas que você deseja suportar
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
   Future<String> _getFirstImage(String mediaId) async {
-    try{
-      if(mediaId.isNotEmpty) {
+    try {
+      if (mediaId.isNotEmpty) {
         final media = await _mediaService.getById(mediaId);
         if (media != null) {
           return media.base64;
         }
       }
-    }
-    catch(_){}
+    } catch (_) {}
     return "";
   }
 

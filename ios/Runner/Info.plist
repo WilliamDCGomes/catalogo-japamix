@@ -38,6 +38,16 @@
 			<string>UIInterfaceOrientationLandscapeLeft</string>
 			<string>UIInterfaceOrientationLandscapeRight</string>
 		</array>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<!-- Adicione esta linha para definir o esquema de URL personalizado -->
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>compartilharlink</string>
+				</array>
+			</dict>
+		</array>
 		<key>UISupportedInterfaceOrientations~ipad</key>
 		<array>
 			<string>UIInterfaceOrientationPortrait</string>

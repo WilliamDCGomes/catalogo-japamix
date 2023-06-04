@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lazy_loading_list/lazy_loading_list.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
@@ -135,6 +136,32 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     builder: (BuildContext context) {
                                       return ConfirmationPopup(
                                         title: "Aviso",
+                                        subTitle: "Tem certeza que deseja compartilhar esse anúncio?",
+                                        firstButton: () {},
+                                        secondButton: () {
+                                          String mensagem =
+                                              'Confira o estabelecimento ${widget.establishment.name} através do link: https://www.compartilharlink.com/${widget.establishment.id}';
+
+                                          Share.share(mensagem, subject: 'Compartilhamento de link');
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.share,
+                                  color: AppColors.blackColor,
+                                  size: 3.h,
+                                ),
+                              ),
+                              SizedBox(width: 4.w),
+                              InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: Get.context!,
+                                    builder: (BuildContext context) {
+                                      return ConfirmationPopup(
+                                        title: "Aviso",
                                         subTitle: "Tem certeza que deseja apagar esse anúncio?",
                                         firstButton: () {},
                                         secondButton: () => controller.deleteAd(),
@@ -231,7 +258,8 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                                 itemCount: controller.visitPlace.imagesPlace.length,
                                                 itemBuilder: (context, index) {
                                                   return InkWell(
-                                                    onTap: () => ViewPicture.openPicture(controller.visitPlace.imagesPlace[index]),
+                                                    onTap: () =>
+                                                        ViewPicture.openPicture(controller.visitPlace.imagesPlace[index]),
                                                     child: LazyLoadingList(
                                                       initialSizeOfItems: 2,
                                                       index: index,
@@ -268,10 +296,12 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                       padding: EdgeInsets.only(top: 1.h, bottom: 2.h),
                                       child: TextButton(
                                         onPressed: () async {
-                                          String completeAddress = "https://www.google.com/maps/search/?api=1&query=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
+                                          String completeAddress =
+                                              "https://www.google.com/maps/search/?api=1&query=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
                                               "${controller.visitPlace.district ?? ''}, ${controller.visitPlace.cep ?? ''}";
-                                          if(Platform.isIOS){
-                                            completeAddress = "http://maps.apple.com/?q=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
+                                          if (Platform.isIOS) {
+                                            completeAddress =
+                                                "http://maps.apple.com/?q=${controller.visitPlace.address ?? ''}, ${controller.visitPlace.number ?? ''}, "
                                                 "${controller.visitPlace.district ?? ''}, ${controller.visitPlace.cep ?? ''}";
                                           }
 
@@ -325,7 +355,9 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                             mode: LaunchMode.externalNonBrowserApplication);
                                       } else {
                                         launchUrl(Uri.parse("tel:${controller.visitPlace.primaryTelephone}"),
-                                            mode: Platform.isAndroid ? LaunchMode.externalNonBrowserApplication : LaunchMode.externalApplication);
+                                            mode: Platform.isAndroid
+                                                ? LaunchMode.externalNonBrowserApplication
+                                                : LaunchMode.externalApplication);
                                       }
                                     },
                                     child: Row(
@@ -355,7 +387,9 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     TextButton(
                                       onPressed: () {
                                         launchUrl(Uri.parse("tel:${controller.visitPlace.secondaryTelephone}"),
-                                            mode: Platform.isAndroid ? LaunchMode.externalNonBrowserApplication : LaunchMode.externalApplication);
+                                            mode: Platform.isAndroid
+                                                ? LaunchMode.externalNonBrowserApplication
+                                                : LaunchMode.externalApplication);
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
@@ -384,7 +418,9 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                     TextButton(
                                       onPressed: () {
                                         launchUrl(Uri.parse("tel:${controller.visitPlace.tertiaryTelephone}"),
-                                            mode: Platform.isAndroid ? LaunchMode.externalNonBrowserApplication : LaunchMode.externalApplication);
+                                            mode: Platform.isAndroid
+                                                ? LaunchMode.externalNonBrowserApplication
+                                                : LaunchMode.externalApplication);
                                       },
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
