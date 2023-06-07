@@ -30,7 +30,7 @@ Establishment _$EstablishmentFromJson(Map<String, dynamic> json) =>
       categoryIds: (json['categoryIds'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-    );
+    )..categoryId = json['categoryId'] as String?;
 
 Map<String, dynamic> _$EstablishmentToJson(Establishment instance) {
   final val = <String, dynamic>{
@@ -60,5 +60,6 @@ Map<String, dynamic> _$EstablishmentToJson(Establishment instance) {
 
   writeNotNull('establishmentMediaIds', instance.establishmentMediaIds);
   writeNotNull('categoryIds', instance.categoryIds);
+  writeNotNull('categoryId', instance.categoryId);
   return val;
 }

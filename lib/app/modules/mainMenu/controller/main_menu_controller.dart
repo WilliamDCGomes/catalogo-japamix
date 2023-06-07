@@ -140,7 +140,7 @@ class MainMenuController extends GetxController {
     final initialLink = await getInitialLink();
 
     try {
-      // Verifica se o link não é nulo e corresponde ao esquema de URL personalizado do seu aplicativo
+      // Verifica se o link não é nulo e corresponde ao esquema de URL personalizado do seu apicativo
       //compartilharlink://estabelecimento?id=9dc8ddc3-51be-47a1-aae5-bae3df4dd228
       if (initialLink != null && initialLink.contains('catalagojapamix')) {
         // Extraia os parâmetros, se houver

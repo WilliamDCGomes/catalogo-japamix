@@ -6,6 +6,7 @@ import '../../../utils/sharedWidgets/category_list_widget.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
+import '../../mainMenuBanner/page/main_menu_banner_page.dart';
 import '../controller/main_menu_controller.dart';
 
 class MainMenuPage extends StatefulWidget {
@@ -141,6 +142,20 @@ class _MainMenuPageState extends State<MainMenuPage> {
                       Icons.add,
                       color: AppColors.whiteColor,
                       size: 40,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 8.h, right: 4.w),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      onTap: () => Get.to(() => const MainMenuBannerPage()),
+                      child: Icon(
+                        Icons.edit,
+                        color: AppColors.blackColor,
+                        size: 3.h,
+                      ),
                     ),
                   ),
                 ),
