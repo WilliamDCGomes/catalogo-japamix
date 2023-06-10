@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import '../../../../flavors.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/category_list_widget.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
@@ -152,7 +153,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                         ],
                       ),
                     ),
-                    floatingActionButton: FloatingActionButton(
+                    floatingActionButton: F.isAdm ? FloatingActionButton(
                       onPressed: () => controller.addAd(),
                       backgroundColor: AppColors.redColor,
                       elevation: 3,
@@ -161,7 +162,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                         color: AppColors.whiteColor,
                         size: 40,
                       ),
-                    ),
+                    ) : null,
                   ),
                   GetBuilder(
                     id: "stepper",
@@ -209,22 +210,25 @@ class _MainMenuPageState extends State<MainMenuPage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: Platform.isAndroid ? 7.5.h : 9.h, right: 4.w),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: InkWell(
-                        onTap: () => Get.to(() => const MainMenuBannerPage()),
-                        child: Container(
-                          padding: EdgeInsets.all(1.h),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(1.h),
-                            color: AppColors.black40TransparentColor,
-                          ),
-                          child: Icon(
-                            Icons.edit,
-                            color: AppColors.whiteColor,
-                            size: 3.h,
+                  Visibility(
+                    visible: F.isAdm,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: Platform.isAndroid ? 7.5.h : 9.h, right: 4.w),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          onTap: () => Get.to(() => const MainMenuBannerPage()),
+                          child: Container(
+                            padding: EdgeInsets.all(1.h),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(1.h),
+                              color: AppColors.black40TransparentColor,
+                            ),
+                            child: Icon(
+                              Icons.edit,
+                              color: AppColors.whiteColor,
+                              size: 3.h,
+                            ),
                           ),
                         ),
                       ),

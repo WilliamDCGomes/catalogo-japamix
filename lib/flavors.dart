@@ -54,4 +54,8 @@ class F {
         return const InitialPage();
     }
   }
+
+  static bool get isAdm {
+    return false;
+  }
 }

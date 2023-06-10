@@ -7,6 +7,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
+import '../../../../flavors.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/helpers/view_picture.dart';
 import '../../../utils/sharedWidgets/information_container_widget.dart';
@@ -108,25 +109,28 @@ class _DetailAdPageState extends State<DetailAdPage> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              InkWell(
-                                onTap: () async {
-                                  final establishment = await Get.to(() => CreateEditAdPage(
-                                        place: controller.visitPlace,
-                                        categories: widget.categories,
-                                      ));
-                                  if (establishment != null) {
-                                    setState(() {
-                                      controller.visitPlace = establishment;
-                                    });
-                                  }
-                                },
-                                child: Icon(
-                                  Icons.edit,
-                                  color: AppColors.blackColor,
-                                  size: 3.h,
+                              if(F.isAdm)
+                                Padding(
+                                  padding: EdgeInsets.only(right: 4.w),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      final establishment = await Get.to(() => CreateEditAdPage(
+                                            place: controller.visitPlace,
+                                            categories: widget.categories,
+                                          ));
+                                      if (establishment != null) {
+                                        setState(() {
+                                          controller.visitPlace = establishment;
+                                        });
+                                      }
+                                    },
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: AppColors.blackColor,
+                                      size: 3.h,
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 4.w),
                               InkWell(
                                 onTap: () => controller.shareAd(),
                                 child: Icon(
@@ -135,27 +139,30 @@ class _DetailAdPageState extends State<DetailAdPage> {
                                   size: 3.h,
                                 ),
                               ),
-                              SizedBox(width: 4.w),
-                              InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: Get.context!,
-                                    builder: (BuildContext context) {
-                                      return ConfirmationPopup(
-                                        title: "Aviso",
-                                        subTitle: "Tem certeza que deseja apagar esse anúncio?",
-                                        firstButton: () {},
-                                        secondButton: () => controller.deleteAd(),
+                              if(F.isAdm)
+                                Padding(
+                                  padding: EdgeInsets.only(left: 4.w),
+                                  child: InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: Get.context!,
+                                        builder: (BuildContext context) {
+                                          return ConfirmationPopup(
+                                            title: "Aviso",
+                                            subTitle: "Tem certeza que deseja apagar esse anúncio?",
+                                            firstButton: () {},
+                                            secondButton: () => controller.deleteAd(),
+                                          );
+                                        },
                                       );
                                     },
-                                  );
-                                },
-                                child: Icon(
-                                  Icons.delete,
-                                  color: AppColors.blackColor,
-                                  size: 3.h,
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: AppColors.blackColor,
+                                      size: 3.h,
+                                    ),
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
