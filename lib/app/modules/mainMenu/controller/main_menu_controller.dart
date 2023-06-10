@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:catalago_japamix/app/modules/detailAd/page/detail_ad_page.dart';
 import 'package:catalago_japamix/base/services/interfaces/icategory_service.dart';
 import 'package:catalago_japamix/base/services/interfaces/iestablishment_service.dart';
@@ -5,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:uni_links/uni_links.dart';
+import '../../../../base/models/banner/banners.dart';
 import '../../../../base/models/category/category.dart';
 import '../../../../base/models/establishment/establishment.dart';
+import '../../../../base/services/banner_service.dart';
 import '../../../../base/services/category_service.dart';
 import '../../../../base/services/establishment_service.dart';
+import '../../../../base/services/interfaces/ibanner_service.dart';
 import '../../../../base/services/interfaces/imedia_service.dart';
 import '../../../../base/services/media_service.dart';
 import '../../../utils/sharedWidgets/button_widget.dart';
@@ -26,11 +30,15 @@ class MainMenuController extends GetxController {
   late bool allCategoriesSelected;
   late TextEditingController searchByName;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
+  late CarouselController carouselController;
+  late RxInt activeStep;
   late RxList<PlaceCardWidget> _visitPlaces;
   late RxList<Category> _categories;
+  late RxList<Banners> allBanners;
   late final IEstablishmentService _establishmentService;
   late final ICategoryService _categoryService;
   late final IMediaService _mediaService;
+  late final IBannerService _bannerService;
 
   MainMenuController() {
     _initializeVariables();
@@ -38,7 +46,7 @@ class MainMenuController extends GetxController {
 
   @override
   void onInit() async {
-    _initializeMethods();
+    await _initializeMethods();
     super.onInit();
   }
 
@@ -46,20 +54,26 @@ class MainMenuController extends GetxController {
     allCategoriesSelected = true;
     searchByName = TextEditingController();
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
+    carouselController = CarouselController();
     _establishmentService = EstablishmentService();
     _categoryService = CategoryService();
     _mediaService = MediaService();
+    _bannerService = BannerService();
+    activeStep = 0.obs;
     _categories = <Category>[].obs;
     _visitPlaces = <PlaceCardWidget>[].obs;
+    allBanners = <Banners>[].obs;
   }
 
   _initializeMethods() async {
     await Future.delayed(const Duration(milliseconds: 200));
     await loadingWithSuccessOrErrorWidget.startAnimation();
+    activeStep.value = 0;
     await getCategories();
     await getPlaces();
-
+    await _getBanners();
     await loadingWithSuccessOrErrorWidget.stopAnimation(justLoading: true);
+    _updateStepper();
   }
 
   //Getters
@@ -95,6 +109,23 @@ class MainMenuController extends GetxController {
     return allPlaceSeparateByCategory;
   }
 
+  _getBanners() async {
+    try {
+      allBanners.clear();
+      allBanners.addAll(await _bannerService.getAll());
+    }
+    catch(_) {
+    }
+  }
+
+  _updateStepper() {
+    update(["stepper"]);
+  }
+
+  refreshPage() async {
+    await _initializeMethods();
+  }
+
   Future<void> getCategories() async {
     try {
       _categories.value = [];
@@ -116,11 +147,15 @@ class MainMenuController extends GetxController {
 
       for (var place in places) {
         place.categoryName = _categories.firstWhere((category) => place.categoryIds!.contains(category.id)).description;
-        // var image = await _getFirstImage(place.establishmentMediaIds!.first);
-        // if (image.isEmpty && place.establishmentMediaIds!.length > 1) {
-        //   image = await _getFirstImage(place.establishmentMediaIds![1]);
-        // }
-        // place.imagesPlace.add(image);
+
+        if(place.establishmentMediaIds != null && place.establishmentMediaIds!.isNotEmpty) {
+          var image = await _getFirstImage(place.establishmentMediaIds!.first);
+          if (image.isEmpty && place.establishmentMediaIds!.length > 1) {
+            image = await _getFirstImage(place.establishmentMediaIds![1]);
+          }
+          place.imagesPlace.add(image);
+        }
+
         _visitPlaces.add(
           PlaceCardWidget(
             place: place,

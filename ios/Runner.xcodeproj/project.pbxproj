@@ -509,7 +509,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.catalagoJapamix;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -779,7 +779,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.catalagoJapamix;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -802,7 +802,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.catalagoJapamix;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -1237,7 +1237,7 @@
 			baseConfigurationReference = 66C12B086DAFD758583C8CA6 /* Pods-Runner.debug-dev.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.catalagoJapamix-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Debug-dev";
@@ -1247,7 +1247,7 @@
 			baseConfigurationReference = 75A07847E1EBF59D0AB466BC /* Pods-Runner.profile-dev.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.catalagoJapamix-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Profile-dev";
@@ -1257,7 +1257,7 @@
 			baseConfigurationReference = 3551C6F28C1FEEE36ADAC944 /* Pods-Runner.release-dev.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.catalagoJapamix-dev";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Release-dev";
@@ -1267,7 +1267,7 @@
 			baseConfigurationReference = 0997F45ECA42EB61AAA60055 /* Pods-Runner.debug-hmlg.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.catalagoJapamix-hmlg";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Debug-hmlg";
@@ -1277,7 +1277,7 @@
 			baseConfigurationReference = 113A46C221F1EF01CE281225 /* Pods-Runner.profile-hmlg.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.catalagoJapamix-hmlg";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Profile-hmlg";
@@ -1287,7 +1287,7 @@
 			baseConfigurationReference = D53EA88D2070054209021861 /* Pods-Runner.release-hmlg.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.catalagoJapamix-hmlg";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Release-hmlg";
@@ -1297,7 +1297,7 @@
 			baseConfigurationReference = 3326167334120BB36E41C1CD /* Pods-Runner.debug-prod.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = com.catalagoJapamix;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Debug-prod";
@@ -1307,7 +1307,7 @@
 			baseConfigurationReference = 70764F126279A4AAA935D777 /* Pods-Runner.profile-prod.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = com.catalagoJapamix;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Profile-prod";
@@ -1317,7 +1317,7 @@
 			baseConfigurationReference = 5B183EA97CA8178703301DF9 /* Pods-Runner.release-prod.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = L9K3HNRB7K;
-				PRODUCT_BUNDLE_IDENTIFIER = com.catalagoJapamix;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.catalago-japamix.catalago";
 				PRODUCT_NAME = Runner;
 			};
 			name = "Release-prod";

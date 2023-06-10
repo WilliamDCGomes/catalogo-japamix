@@ -146,6 +146,7 @@ class _MainMenuBannerPageState extends State<MainMenuBannerPage> {
                                       child: PictureAdWidget(
                                         fromAsset: false,
                                         path: controller.allBanners[index].base64,
+                                        closeButton: () async => await controller.removePicture(index),
                                       ),
                                     ),
                                   ),

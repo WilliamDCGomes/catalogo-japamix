@@ -683,6 +683,7 @@ class _CreateEditAdPageState extends State<CreateEditAdPage> {
                                                   hasMore: true,
                                                   child: PictureAdWidget(
                                                     path: controller.placeImages[index],
+                                                    closeButton: () async => await controller.removePicture(index),
                                                   ),
                                                 ),
                                               );

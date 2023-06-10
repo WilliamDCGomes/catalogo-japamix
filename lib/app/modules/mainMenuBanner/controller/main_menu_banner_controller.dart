@@ -60,6 +60,20 @@ class MainMenuBannerController extends GetxController {
 
   addBanner() async {
     try {
+      if(allBanners.length == 10) {
+        await showDialog(
+          context: Get.context!,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return const InformationPopup(
+              warningMessage: "É permitido no máximo 10 imagens no banner.\nPara adicionar outra imagem, remova outra antes.",
+            );
+          },
+        );
+        return;
+      }
+
+
       final images = await ViewPicture.addNewPicture();
       if (images != null) {
         changed.value = true;

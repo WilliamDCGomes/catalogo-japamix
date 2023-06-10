@@ -1,5 +1,8 @@
+import 'dart:io';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:im_stepper/stepper.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../utils/helpers/paths.dart';
 import '../../../utils/sharedWidgets/category_list_widget.dart';
@@ -7,6 +10,7 @@ import '../../../utils/sharedWidgets/information_container_widget.dart';
 import '../../../utils/sharedWidgets/text_widget.dart';
 import '../../../utils/stylePages/app_colors.dart';
 import '../../mainMenuBanner/page/main_menu_banner_page.dart';
+import '../../mainMenuBanner/widget/banner_widget.dart';
 import '../controller/main_menu_controller.dart';
 
 class MainMenuPage extends StatefulWidget {
@@ -41,126 +45,194 @@ class _MainMenuPageState extends State<MainMenuPage> {
                 colors: AppColors.backgroundFirstScreenColor,
               ),
             ),
-            child: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    height: 30.h,
-                    margin: EdgeInsets.only(top: 6.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.defaultColor,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(5.h),
-                        bottomRight: Radius.circular(5.h),
-                      ),
-                      image: const DecorationImage(
-                        alignment: Alignment.bottomCenter,
-                        fit: BoxFit.fitWidth,
-                        image: AssetImage(
-                          Paths.backgroundImage,
+            child: RefreshIndicator(
+              onRefresh: () => controller.refreshPage(),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Obx(
+                      () => Visibility(
+                        visible: controller.allBanners.isEmpty,
+                        replacement: CarouselSlider.builder(
+                          carouselController: controller.carouselController,
+                          itemCount: controller.allBanners.length,
+                          options: CarouselOptions(
+                            height: 30.h,
+                            viewportFraction: 1,
+                            enlargeStrategy: CenterPageEnlargeStrategy.height,
+                            enlargeCenterPage: true,
+                            enableInfiniteScroll: false,
+                            autoPlay: controller.allBanners.length > 1,
+                            autoPlayInterval: const Duration(seconds: 5),
+                            onPageChanged: (itemIndex, reason){
+                              controller.activeStep.value = itemIndex;
+                            }
+                          ),
+                          itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                            return BannerWidget(
+                              image: controller.allBanners[itemIndex].base64,
+                            );
+                          },
+                        ),
+                        child: const BannerWidget(
+                          image: Paths.backgroundImage,
+                          isAsset: true,
                         ),
                       ),
                     ),
                   ),
-                ),
-                Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: AppColors.defaultColor,
-                    title: Stack(
-                      children: [
-                        Center(
-                          child: TextWidget(
-                            "GUIA MIX",
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: InkWell(
-                            onTap: () => controller.openFilter(),
-                            child: Icon(
-                              Icons.filter_list_alt,
-                              color: AppColors.blackColor,
-                              size: 3.h,
+                  Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: AppColors.defaultColor,
+                      title: Stack(
+                        children: [
+                          Center(
+                            child: TextWidget(
+                              "GUIA MIX",
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        )
-                      ],
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: InkWell(
+                              onTap: () => controller.openFilter(),
+                              child: Icon(
+                                Icons.filter_list_alt,
+                                color: AppColors.blackColor,
+                                size: 3.h,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      elevation: 5,
                     ),
-                    elevation: 5,
-                  ),
-                  backgroundColor: AppColors.transparentColor,
-                  body: Padding(
-                    padding: EdgeInsets.only(left: 4.w, top: 15.h, right: 4.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        InformationContainerWidget(
-                          iconPath: Paths.iconeGuiaMixTransparente,
-                          disableWhiteIconColor: true,
-                          showBorder: true,
-                          textColor: AppColors.blackColor,
-                          backgroundColor: AppColors.defaultColor,
-                          informationText: "",
-                          customContainer: TextWidget(
-                            "Lista de utilidade pública",
+                    backgroundColor: AppColors.transparentColor,
+                    body: Padding(
+                      padding: EdgeInsets.only(left: 4.w, top: 15.h, right: 4.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          InformationContainerWidget(
+                            iconPath: Paths.iconeGuiaMixTransparente,
+                            disableWhiteIconColor: true,
+                            showBorder: true,
                             textColor: AppColors.blackColor,
-                            fontSize: 18.sp,
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            fontWeight: FontWeight.bold,
+                            backgroundColor: AppColors.defaultColor,
+                            informationText: "",
+                            customContainer: TextWidget(
+                              "Lista de utilidade pública",
+                              textColor: AppColors.blackColor,
+                              fontSize: 18.sp,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Obx(
-                            () => Visibility(
-                              visible: controller.visitPlaces.isNotEmpty,
-                              replacement: Center(
-                                child: TextWidget(
-                                  "Nenhum local encontrado",
-                                  textColor: AppColors.blackColor,
-                                  fontSize: 18.sp,
-                                  maxLines: 2,
+                          Expanded(
+                            child: Obx(
+                              () => Visibility(
+                                visible: controller.visitPlaces.isNotEmpty,
+                                replacement: Center(
+                                  child: TextWidget(
+                                    "Nenhum local encontrado",
+                                    textColor: AppColors.blackColor,
+                                    fontSize: 18.sp,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                child: CategoryListWidget(
+                                  itens: controller.visitPlaces,
                                 ),
                               ),
-                              child: CategoryListWidget(
-                                itens: controller.visitPlaces,
-                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () => controller.addAd(),
-                    backgroundColor: AppColors.redColor,
-                    elevation: 3,
-                    child: const Icon(
-                      Icons.add,
-                      color: AppColors.whiteColor,
-                      size: 40,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 8.h, right: 4.w),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: InkWell(
-                      onTap: () => Get.to(() => const MainMenuBannerPage()),
-                      child: Icon(
-                        Icons.edit,
-                        color: AppColors.blackColor,
-                        size: 3.h,
+                    floatingActionButton: FloatingActionButton(
+                      onPressed: () => controller.addAd(),
+                      backgroundColor: AppColors.redColor,
+                      elevation: 3,
+                      child: const Icon(
+                        Icons.add,
+                        color: AppColors.whiteColor,
+                        size: 40,
                       ),
                     ),
                   ),
-                ),
-                controller.loadingWithSuccessOrErrorWidget,
-              ],
+                  GetBuilder(
+                    id: "stepper",
+                    init: controller,
+                    builder: (_) => Obx(
+                      () => Visibility(
+                        visible: controller.allBanners.length > 2,
+                        child: Align(
+                          alignment: Alignment.topCenter,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                height: 5.h,
+                                padding: EdgeInsets.all(1.h),
+                                margin: EdgeInsets.only(top: Platform.isAndroid ? 7.5.h : 9.h),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1.h),
+                                  color: AppColors.black40TransparentColor,
+                                ),
+                                child: Center(
+                                  child: DotStepper(
+                                    dotCount: controller.allBanners.length < 2 ? 2 : controller.allBanners.length,
+                                    dotRadius: .8.h,
+                                    activeStep: controller.activeStep.value,
+                                    shape: Shape.circle,
+                                    spacing: 3.w,
+                                    indicator: Indicator.magnify,
+                                    fixedDotDecoration: const FixedDotDecoration(
+                                      color: AppColors.grayStepColor,
+                                    ),
+                                    indicatorDecoration: const IndicatorDecoration(
+                                      color: AppColors.whiteColor,
+                                    ),
+                                    onDotTapped: (tappedDotIndex) {
+                                      controller.activeStep.value = tappedDotIndex;
+                                      controller.carouselController.jumpToPage(tappedDotIndex);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: Platform.isAndroid ? 7.5.h : 9.h, right: 4.w),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () => Get.to(() => const MainMenuBannerPage()),
+                        child: Container(
+                          padding: EdgeInsets.all(1.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(1.h),
+                            color: AppColors.black40TransparentColor,
+                          ),
+                          child: Icon(
+                            Icons.edit,
+                            color: AppColors.whiteColor,
+                            size: 3.h,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  controller.loadingWithSuccessOrErrorWidget,
+                ],
+              ),
             ),
           ),
         ),
