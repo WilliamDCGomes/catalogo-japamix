@@ -146,7 +146,8 @@ class MainMenuController extends GetxController {
       var places = await _establishmentService.getAll();
 
       for (var place in places) {
-        place.categoryName = _categories.firstWhere((category) => place.categoryIds!.contains(category.id)).description;
+        var category = _categories.firstWhereOrNull((category) => place.categoryIds!.contains(category.id));
+        place.categoryName = category != null ? category.description : "Sem categoria";
 
         if(place.establishmentMediaIds != null && place.establishmentMediaIds!.isNotEmpty) {
           var image = await _getFirstImage(place.establishmentMediaIds!.first);
@@ -205,7 +206,6 @@ class MainMenuController extends GetxController {
         // Adicione mais condições para outras telas que você deseja suportar
       }
     } catch (e) {
-      print(e);
     }
   }
 

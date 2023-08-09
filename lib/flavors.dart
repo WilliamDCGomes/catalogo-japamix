@@ -40,7 +40,7 @@ class F {
       case Flavor.prod:
         return '';
       default:
-        return 'http://192.168.1.35:5053/api';
+        return '';
     }
   }
 
