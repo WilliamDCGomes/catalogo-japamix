@@ -1,16 +1,19 @@
-# catalago_japamix
+# Catálogo Japamix
 
-A new Flutter project.
+## Este aplicativo foi feito no intuito de ser um guia turístico para uma cidade. Ele contém vários locais da cidade como estabelimentos comerciais, atrações, shoppings, parques e entre outros.
 
-## Getting Started
+### Tela com os Estabelecimentos
 
-This project is a starting point for a Flutter application.
+![Tela com Anúncios](https://raw.githubusercontent.com/WilliamDCGomes/catalogo-japamix/main/readmefiles/Tela%20de%20An%C3%BAncios.png)
 
-A few resources to get you started if this is your first Flutter project:
+### Tela de Filtro dos Tipos de Estabelecimentos
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+![Filtro dos Anúncios](https://raw.githubusercontent.com/WilliamDCGomes/catalogo-japamix/main/readmefiles/Filtrando%20An%C3%BAncios.png)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Tela de Detalhe do Estabelecimento
+
+![Tela de Detalhe do Anúncio](https://raw.githubusercontent.com/WilliamDCGomes/catalogo-japamix/main/readmefiles/Detalhe%20de%20um%20An%C3%BAncio.png)
+
+### Compartilhando o link de um Estabelecimento
+
+![Compartilhando link do anúncio](https://raw.githubusercontent.com/WilliamDCGomes/catalogo-japamix/main/readmefiles/Compartilhando%20um%20Estabelecimento.png)
