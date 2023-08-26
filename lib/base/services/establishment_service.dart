@@ -27,18 +27,34 @@ class EstablishmentService extends BaseService implements IEstablishmentService 
   }
 
   @override
-  Future<List<Establishment>> getAll() async {
+  Future<List<Establishment>> getAll(List<QueryDocumentSnapshot<Map<String, dynamic>>>? establishmentsSend) async {
     try {
-      var establishments = await FirebaseFirestore.instance
-          .collection("establishment")
-          .get()
-          .timeout(const Duration(seconds: 30));
+      QuerySnapshot<Map<String, dynamic>> establishments;
+
+      if(establishmentsSend != null) {
+        establishments = await FirebaseFirestore.instance
+            .collection("establishment")
+            .orderBy("name")
+            .startAfterDocument(establishmentsSend.last)
+            .limit(10)
+            .get()
+            .timeout(const Duration(seconds: 30));
+      }
+      else {
+        establishments = await FirebaseFirestore.instance
+            .collection("establishment")
+            .orderBy("name")
+            .limit(10)
+            .get()
+            .timeout(const Duration(seconds: 30));
+      }
 
       var allEstablishments = establishments.docs.map((e) => Establishment.fromJson(e.data())).toList();
 
       for(var establishment in allEstablishments) {
         establishment.establishmentMediaIds = await _establishmentMediaService.getAllEstablishmentMediaIds(establishment.id);
         establishment.categoryIds = await _establishmentCategoryService.getAllCategoryIds(establishment.id);
+        establishment.lastResults = establishments.docs;
       }
       return allEstablishments;
     } catch (_) {

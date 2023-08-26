@@ -6,10 +6,12 @@ import '../../modules/mainMenu/widgets/place_card_widget.dart';
 
 class CategoryListWidget extends StatefulWidget {
   final List<PlaceCardWidget> itens;
+  final ScrollController scrollController;
 
   const CategoryListWidget({
     Key? key,
     required this.itens,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class _CategoryListWidgetState extends State<CategoryListWidget> {
   Widget build(BuildContext context) {
     return GroupedListView<dynamic, String>(
       elements: widget.itens,
+      controller: widget.scrollController,
       groupBy: (item) => item.categories.firstWhere((category) => category.id == item.place.categoryId).description,
       groupSeparatorBuilder: (String groupByValue) => Padding(
         padding: EdgeInsets.only(bottom: 1.h),

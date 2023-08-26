@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:catalago_japamix/base/models/base/japamix_base.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -34,6 +35,8 @@ class Establishment extends JapaMixBase {
   late String categoryName;
   @JsonKey(includeFromJson: false)
   late CarouselController carouselController;
+  @JsonKey(includeFromJson: false)
+  late List<QueryDocumentSnapshot<Map<String, dynamic>>>? lastResults;
 
   String get completeAddress => '$address, $number, $district, $city, $state, $cep';
 

@@ -50,88 +50,13 @@ class _MainMenuPageState extends State<MainMenuPage> {
               onRefresh: () => controller.refreshPage(),
               child: Stack(
                 children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Obx(
-                      () => Visibility(
-                        visible: controller.allBanners.isEmpty,
-                        replacement: CarouselSlider.builder(
-                          carouselController: controller.carouselController,
-                          itemCount: controller.allBanners.length,
-                          options: CarouselOptions(
-                            height: 30.h,
-                            viewportFraction: 1,
-                            enlargeStrategy: CenterPageEnlargeStrategy.height,
-                            enlargeCenterPage: true,
-                            enableInfiniteScroll: false,
-                            autoPlay: controller.allBanners.length > 1,
-                            autoPlayInterval: const Duration(seconds: 5),
-                            onPageChanged: (itemIndex, reason){
-                              controller.activeStep.value = itemIndex;
-                            }
-                          ),
-                          itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
-                            return BannerWidget(
-                              image: controller.allBanners[itemIndex].base64,
-                            );
-                          },
-                        ),
-                        child: const BannerWidget(
-                          image: Paths.backgroundImage,
-                          isAsset: true,
-                        ),
-                      ),
-                    ),
-                  ),
                   Scaffold(
-                    appBar: AppBar(
-                      backgroundColor: AppColors.defaultColor,
-                      title: Stack(
-                        children: [
-                          Center(
-                            child: TextWidget(
-                              "GUIA MIX",
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: () => controller.openFilter(),
-                              child: Icon(
-                                Icons.filter_list_alt,
-                                color: AppColors.blackColor,
-                                size: 3.h,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      elevation: 5,
-                    ),
                     backgroundColor: AppColors.transparentColor,
                     body: Padding(
-                      padding: EdgeInsets.only(left: 4.w, top: 15.h, right: 4.w),
+                      padding: EdgeInsets.only(left: 4.w, top: 32.h, right: 4.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          InformationContainerWidget(
-                            iconPath: Paths.iconeGuiaMixTransparente,
-                            disableWhiteIconColor: true,
-                            showBorder: true,
-                            textColor: AppColors.blackColor,
-                            backgroundColor: AppColors.defaultColor,
-                            informationText: "",
-                            customContainer: TextWidget(
-                              "Lista de utilidade pública",
-                              textColor: AppColors.blackColor,
-                              fontSize: 18.sp,
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
                           Expanded(
                             child: Obx(
                               () => Visibility(
@@ -146,6 +71,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                 ),
                                 child: CategoryListWidget(
                                   itens: controller.visitPlaces,
+                                  scrollController: controller.scrollController,
                                 ),
                               ),
                             ),
@@ -163,6 +89,68 @@ class _MainMenuPageState extends State<MainMenuPage> {
                         size: 40,
                       ),
                     ) : null,
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Obx(
+                      () => Visibility(
+                        visible: controller.allBanners.isEmpty,
+                        replacement: CarouselSlider.builder(
+                          carouselController: controller.carouselController,
+                          itemCount: controller.allBanners.length,
+                          options: CarouselOptions(
+                              height: 30.h,
+                              viewportFraction: 1,
+                              enlargeStrategy: CenterPageEnlargeStrategy.height,
+                              enlargeCenterPage: true,
+                              enableInfiniteScroll: false,
+                              autoPlay: controller.allBanners.length > 1,
+                              autoPlayInterval: const Duration(seconds: 5),
+                              onPageChanged: (itemIndex, reason){
+                                controller.activeStep.value = itemIndex;
+                              }
+                          ),
+                          itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
+                            return BannerWidget(
+                              image: controller.allBanners[itemIndex].base64,
+                            );
+                          },
+                        ),
+                        child: const BannerWidget(
+                          image: Paths.backgroundImage,
+                          isAsset: true,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 7.h,
+                    color: AppColors.defaultColor,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 1.h,
+                        ),
+                        Expanded(
+                          child: TextWidget(
+                            "GUIA MIX",
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 4.w),
+                          child: InkWell(
+                            onTap: () => controller.openFilter(),
+                            child: Icon(
+                              Icons.menu,
+                              color: AppColors.blackColor,
+                              size: 3.h,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   GetBuilder(
                     id: "stepper",
@@ -207,6 +195,25 @@ class _MainMenuPageState extends State<MainMenuPage> {
                             ],
                           ),
                         ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 4.w, top: 20.h, right: 4.w),
+                    child: InformationContainerWidget(
+                      iconPath: Paths.iconeGuiaMixTransparente,
+                      disableWhiteIconColor: true,
+                      showBorder: true,
+                      textColor: AppColors.blackColor,
+                      backgroundColor: AppColors.defaultColor,
+                      informationText: "",
+                      customContainer: TextWidget(
+                        "Lista de utilidade pública",
+                        textColor: AppColors.blackColor,
+                        fontSize: 18.sp,
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

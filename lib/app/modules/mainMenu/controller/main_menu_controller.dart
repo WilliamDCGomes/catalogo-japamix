@@ -27,6 +27,7 @@ import '../../createEditAd/page/create_edit_ad_page.dart';
 import '../widgets/place_card_widget.dart';
 
 class MainMenuController extends GetxController {
+  late bool _allPlacesLoad;
   late bool allCategoriesSelected;
   late TextEditingController searchByName;
   late LoadingWithSuccessOrErrorWidget loadingWithSuccessOrErrorWidget;
@@ -35,6 +36,7 @@ class MainMenuController extends GetxController {
   late RxList<PlaceCardWidget> _visitPlaces;
   late RxList<Category> _categories;
   late RxList<Banners> allBanners;
+  late ScrollController scrollController;
   late final IEstablishmentService _establishmentService;
   late final ICategoryService _categoryService;
   late final IMediaService _mediaService;
@@ -51,6 +53,7 @@ class MainMenuController extends GetxController {
   }
 
   _initializeVariables() {
+    _allPlacesLoad = false;
     allCategoriesSelected = true;
     searchByName = TextEditingController();
     loadingWithSuccessOrErrorWidget = LoadingWithSuccessOrErrorWidget();
@@ -60,6 +63,15 @@ class MainMenuController extends GetxController {
     _mediaService = MediaService();
     _bannerService = BannerService();
     activeStep = 0.obs;
+    scrollController = ScrollController();
+    scrollController.addListener(() async {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        await loadingWithSuccessOrErrorWidget.startAnimation();
+        await getPlaces();
+        await loadingWithSuccessOrErrorWidget.stopAnimation(justLoading: true);
+      }
+    });
     _categories = <Category>[].obs;
     _visitPlaces = <PlaceCardWidget>[].obs;
     allBanners = <Banners>[].obs;
@@ -70,6 +82,7 @@ class MainMenuController extends GetxController {
     await loadingWithSuccessOrErrorWidget.startAnimation();
     activeStep.value = 0;
     await getCategories();
+    _visitPlaces.value = [];
     await getPlaces();
     await _getBanners();
     await loadingWithSuccessOrErrorWidget.stopAnimation(justLoading: true);
@@ -142,27 +155,35 @@ class MainMenuController extends GetxController {
 
   Future<void> getPlaces() async {
     try {
-      _visitPlaces.value = [];
-      var places = await _establishmentService.getAll();
-
-      for (var place in places) {
-        var category = _categories.firstWhereOrNull((category) => place.categoryIds!.contains(category.id));
-        place.categoryName = category != null ? category.description : "Sem categoria";
-
-        if(place.establishmentMediaIds != null && place.establishmentMediaIds!.isNotEmpty) {
-          var image = await _getFirstImage(place.establishmentMediaIds!.first);
-          if (image.isEmpty && place.establishmentMediaIds!.length > 1) {
-            image = await _getFirstImage(place.establishmentMediaIds![1]);
-          }
-          place.imagesPlace.add(image);
+      if(!_allPlacesLoad) {
+        late List<Establishment> places;
+        if(_visitPlaces.isEmpty) {
+          places = await _establishmentService.getAll(null);
+        }
+        else {
+          places = await _establishmentService.getAll(_visitPlaces.last.place.lastResults);
         }
 
-        _visitPlaces.add(
-          PlaceCardWidget(
-            place: place,
-            categories: _categories,
-          ),
-        );
+        _allPlacesLoad = places.length < 10;
+        for (var place in places) {
+          var category = _categories.firstWhereOrNull((category) => place.categoryIds!.contains(category.id));
+          place.categoryName = category != null ? category.description : "Sem categoria";
+
+          if(place.establishmentMediaIds != null && place.establishmentMediaIds!.isNotEmpty) {
+            var image = await _getFirstImage(place.establishmentMediaIds!.first);
+            if (image.isEmpty && place.establishmentMediaIds!.length > 1) {
+              image = await _getFirstImage(place.establishmentMediaIds![1]);
+            }
+            place.imagesPlace.add(image);
+          }
+
+          _visitPlaces.add(
+            PlaceCardWidget(
+              place: place,
+              categories: _categories,
+            ),
+          );
+        }
       }
     } catch (_) {
       _visitPlaces.value = [];
